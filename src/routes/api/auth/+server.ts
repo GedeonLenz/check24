@@ -21,7 +21,7 @@ export async function POST(event:any) {
         let authenticated: boolean = await bcrypt.compare(password, storedUserPasswordHash);
 
         if (authenticated) {
-            let JWT_TOKEN = await generateJWT(userObjs[0].username, userObjs[0].type)
+            let JWT_TOKEN = await generateJWT(userObjs[0].username, userObjs[0].type, userObjs[0].pictureURL)
             cookies.set("sessionToken", JWT_TOKEN, {path: "/"});
             return getResponse_Success();
         }

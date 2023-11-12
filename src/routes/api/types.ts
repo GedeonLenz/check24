@@ -15,6 +15,7 @@ export interface UserObj {
     username: string;
     passwordhash: string;
     type: UserRole;
+    pictureURL:string;
 }
 
 export interface User extends Omit<Omit<UserObj, '_id'>, 'passwordhash'> {}
@@ -38,7 +39,7 @@ export interface ConversationInsertRequest {
         customer: string;
         serviceprovider: string;
     };
-    initMessage: Message_Offer
+    initMessage: Message_OfferRequest
 }
 export function isConversationRequest(obj: any): obj is ConversationInsertRequest {
     return (
@@ -62,16 +63,20 @@ export interface ConversationUpdateRequest {
 //--------Responses--------//
 //Insert
 export interface ConversationInsertResponse {
-    conversation: Conversation,
+    conversation: ConversationEntry,
     message:Message_Offer
 }
 //List
 export interface ConversationListResponse {
-    conversations: {
-        conversationObj: Conversation,
-        lastMessage: Message,
-        unreadCount: number
-    }[]
+    conversations: ConversationEntry[],
+    lastOpened:ConversationEntry | undefined
+}
+
+export interface ConversationEntry {
+    conversationObj: Conversation,
+    lastMessage: Message,
+    unreadCount: number,
+    pictureURL:string
 }
 
 //----------Data----------//
@@ -81,8 +86,7 @@ export enum ConversationState {
     Quoted = "quoted",
     Chatting = "chatting",
     Accepted = "accepted",
-    Rejected = "Rejected",
-    Archived = "archived"
+    Rejected = "Rejected"
 }
 //Database
 export interface Conversation {
@@ -96,8 +100,15 @@ export interface Conversation {
         created: string;
         updated: string;
         opened: string;
-        deleted: string;
+        archived?: {
+            customer: string,
+            serviceprovider:string;
+        }
     };
+    archived?: {
+        customer:boolean;
+        serviceprovider:boolean;
+    }
 };
 //Insertions
 export interface ConversationInsert extends Omit<Conversation, '_id'> {}
@@ -110,12 +121,12 @@ export interface ConversationInsert extends Omit<Conversation, '_id'> {}
 //--------Requests--------//
 //Insert
 export interface Message_StandardRequest {
-    _id: string;
+    conversationID: string,
     sender: User,
     messageType: MessageType.Standard,
     text:string;
 }
-export interface Message_OfferRequest extends Omit<Message_StandardRequest, 'messageType'>{
+export interface Message_OfferRequest extends Omit<Omit<Message_StandardRequest, 'conversationID'>, 'messageType'>{
     messageType: MessageType.Offer;
     details: {
         price: number;
@@ -127,10 +138,12 @@ export interface Message_AcceptRequest extends Omit<Message_StandardRequest, 'me
 export interface Message_RejectRequest extends Omit<Message_StandardRequest, 'messageType'>{
     messageType: MessageType.Reject;
 }
-export interface Message_FileRequest extends Omit<Message_StandardRequest, 'messageType'>{
+export interface Message_FileRequest extends Omit<Omit<Message_StandardRequest, 'text'>, 'messageType'>{
     messageType: MessageType.File;
 }
-export type MessageRequest = Message_StandardRequest | Message_OfferRequest | Message_AcceptRequest | Message_RejectRequest | Message_FileRequest;
+export type MessageAndOfferRequest = Message_StandardRequest | Message_OfferRequest | Message_AcceptRequest | Message_RejectRequest | Message_FileRequest;
+export type MessageRequest = Message_StandardRequest | Message_AcceptRequest | Message_RejectRequest | Message_FileRequest;
+
 //List
 export interface ChatMessagesRequest {
     conversationID:string,
@@ -187,11 +200,12 @@ export interface Message_Accept extends Omit<Message_Standard, 'messageType'> {
 export interface Message_Reject extends Omit<Message_Standard, 'messageType'> {
     messageType: MessageType.Reject;
 }
-export interface Message_File extends Omit<Message_Standard, 'messageType'> {
+export interface Message_File extends Omit<Omit<Message_Standard, 'text'>, 'messageType'> {
     messageType: MessageType.File;
+    filePath: string;
 }
 export type Message = Message_Standard | Message_Offer | Message_Accept | Message_Reject | Message_File;
-
+export type TextMessage = Message_Standard | Message_Offer | Message_Accept | Message_Reject;
 //Insertions
 export interface Message_StandardInsert extends Omit<Message_Standard, '_id'> {}
 export interface Message_OfferInsert extends Omit<Message_Offer, '_id'> {}
