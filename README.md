@@ -1,6 +1,6 @@
 # Check24 
 
-The readme fill follow soon
+The readme will follow soon
 
 ## Deployment
 Demo availible at:
