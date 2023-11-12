@@ -471,7 +471,7 @@
                             {#if conversation.pictureURL !== ""}
                                <img src="{conversation.pictureURL}" alt="profile-icon">
                             {:else}
-                                <img src="/static/user.png" alt="profile-icon">
+                                <img src="/user.png" alt="profile-icon">
                             {/if}
                         </span>
                         <div class="chat-details">
@@ -511,11 +511,11 @@
         <div class="chat-profile">
             <div class="icon-wrapper-back" on:click={() => {chatOpen = false}}><i class="archive-disabled fa-solid fa-angle-left"></i></div>
             <span class="chat-bar-picture">
-                <img src="/static/user.png" alt="profile-icon">
+                <img src="/user.png" alt="profile-icon">
                 {#if selectedConversation !== undefined && selectedConversation.pictureURL !== ""}
                    <img src="{selectedConversation.pictureURL}" alt="profile-icon">
                 {:else}
-                    <img src="/static/user.png" alt="profile-icon">
+                    <img src="/user.png" alt="profile-icon">
                 {/if}
             </span>
             <span class="chat-title">{selectedConversation !== undefined ? getOtherUsername(currentUser,selectedConversation.conversationObj.usernames) : ''}</span>

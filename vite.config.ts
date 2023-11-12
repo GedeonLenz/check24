@@ -4,8 +4,11 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	server: {
 		fs: {
-			allow: ['public/uploads','static'],
+			allow: ['static'],
 		},
+	},
+	build: {
+		assetsDir: "static",
 	},
 	plugins: [sveltekit()]
 });

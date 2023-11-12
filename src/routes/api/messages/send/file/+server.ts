@@ -18,6 +18,9 @@ import type {ObjectId} from "mongodb";
 import {collection_messages} from "$db/collections";
 import { writeFileSync } from 'fs';
 import * as crypto from "crypto";
+import AWS from 'aws-sdk';
+
+import {SECURE_STORAGE_S3_BUCKET_NAME,SECURE_STORAGE_S3_ACCESSKEY,SECURE_STORAGE_S3_SECRETKEY,SECURE_STORAGE_S3_REGION,SECURE_STORAGE_S3_DIRECTORY,SECURE_STORAGE_S3_PUBLIC_URL,SECURE_STORAGE_S3_ENDPOINT} from "$env/static/private";
 
 function getExtension(filename:string) {
     var parts = filename.split('.');
@@ -95,12 +98,37 @@ export async function POST(event:any) {
             for(let i = 0; i < 3; i++) {
                 randomString += "-"+crypto.randomUUID();
             }
-            let directoryName = randomString;
-            const directoryPath = `public/uploads/${directoryName}`;
-            await fsPromises.mkdir(directoryPath);
 
-            const filePath:string = `${directoryPath}/${file.name}`;
-            writeFileSync(filePath, Buffer.from(await file.arrayBuffer()));
+            const s3 = new AWS.S3({
+                accessKeyId: SECURE_STORAGE_S3_ACCESSKEY,
+                secretAccessKey: SECURE_STORAGE_S3_SECRETKEY,
+                region: SECURE_STORAGE_S3_REGION,
+                endpoint: SECURE_STORAGE_S3_ENDPOINT
+            });
+
+            let directoryName = randomString;
+            let s3ObjectKey = SECURE_STORAGE_S3_DIRECTORY + directoryName;
+            const params2 = {
+                Bucket: SECURE_STORAGE_S3_BUCKET_NAME,
+                Key: s3ObjectKey,
+                Body: '',
+            };
+            s3.putObject(params2);
+
+            s3ObjectKey =  s3ObjectKey+"/" + file.name;
+            const params = {
+                Bucket: SECURE_STORAGE_S3_BUCKET_NAME,
+                Key: s3ObjectKey,
+                Body: Buffer.from(await file.arrayBuffer()),
+            };
+
+            try {
+                await s3.upload(params).promise();
+            } catch (error) {
+                return getResponse_InternalError();
+            }
+
+            let finalURL = SECURE_STORAGE_S3_PUBLIC_URL+s3ObjectKey
 
             //Insert DB message
             let messageToInsert:Message_FileInsert = {
@@ -108,7 +136,7 @@ export async function POST(event:any) {
                 sender: message.sender,
                 messageType: message.messageType,
                 read:false,
-                filePath:filePath,
+                filePath: finalURL,
                 dates: {
                     created: getCurrentDateTime(),
                     updated: getCurrentDateTime(),
