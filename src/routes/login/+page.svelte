@@ -48,5 +48,5 @@
             <button on:click={() => {login()}} type="submit">Sign in</button>
         </div>
     </div>
-    <img class="chat-icon" src="/static/loginchaticon.png" alt="chat icon">
+    <img class="chat-icon" src="/loginchaticon.png" alt="chat icon">
 </div>
