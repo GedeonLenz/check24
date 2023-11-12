@@ -6,7 +6,6 @@ import {
     MessageType, type NewMessage_FileResponse,
     UserRole
 } from "../../../types";
-import { promises as fsPromises } from 'fs';
 import {
     getConversation, getCurrentDateTime,
     getResponse_BadRequest, getResponse_ErrorCode, getResponse_InternalError, getResponse_Success,
@@ -16,11 +15,18 @@ import {
 import {checkUserRole, getUser} from "../../../auth/auth";
 import type {ObjectId} from "mongodb";
 import {collection_messages} from "$db/collections";
-import { writeFileSync } from 'fs';
 import * as crypto from "crypto";
 import AWS from 'aws-sdk';
 
-import {SECURE_STORAGE_S3_BUCKET_NAME,SECURE_STORAGE_S3_ACCESSKEY,SECURE_STORAGE_S3_SECRETKEY,SECURE_STORAGE_S3_REGION,SECURE_STORAGE_S3_DIRECTORY,SECURE_STORAGE_S3_PUBLIC_URL,SECURE_STORAGE_S3_ENDPOINT} from "$env/static/private";
+import {
+    SECURE_STORAGE_S3_BUCKET_NAME,
+    SECURE_STORAGE_S3_ACCESSKEY,
+    SECURE_STORAGE_S3_SECRETKEY,
+    SECURE_STORAGE_S3_REGION,
+    SECURE_STORAGE_S3_DIRECTORY,
+    SECURE_STORAGE_S3_PUBLIC_URL,
+    SECURE_STORAGE_S3_ENDPOINT
+} from "$env/static/private";
 
 function getExtension(filename:string) {
     var parts = filename.split('.');
