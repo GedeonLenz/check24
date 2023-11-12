@@ -379,10 +379,11 @@
             if (selectedConversation && file != null) {
                 sendProgress = 2;
                 let updateFileProgress = (progress:number) => {
-                    sendProgress = progress;
+                    sendProgress = progress*0.8;
                 }
                 let res = await sendFileMessage(currentUser, selectedConversation.conversationObj._id, file,updateFileProgress);
                 if(res != false) {
+                    sendProgress = 95;
                     await loadMessages();
                     sendProgress = 100;
                 } else {

@@ -125,6 +125,7 @@ export async function POST(event:any) {
             try {
                 await s3.upload(params).promise();
             } catch (error) {
+                console.log(error)
                 return getResponse_InternalError();
             }
 
