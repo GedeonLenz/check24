@@ -82,7 +82,7 @@ export interface ConversationEntry {
 //----------Data----------//
 //Enums
 export enum ConversationState {
-    Initalizing = "quoted",
+    Initalizing = "initializing",
     Quoted = "quoted",
     Chatting = "chatting",
     Accepted = "accepted",
