@@ -175,3 +175,4 @@ A list of possible optimizations and features for the future:
 * See reviews for service providers when engaging in a Chat
 * Add discovery / overview page for customer requests and the ability to send a quote for a listed customer request
 * Add profile pages for each user
+* Encrypt saved chat messages
