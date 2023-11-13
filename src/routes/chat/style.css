@@ -916,7 +916,7 @@ textarea {
 .jumping-dots {
     display: block;
     position: relative;
-    width: 60px;
+    width: 56px !important;
     height: 15px;
     left:50%;
     top:50%;
