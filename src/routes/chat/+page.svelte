@@ -110,6 +110,7 @@
 
     async function openConversationEntry(newConversation:ConversationEntry,isAutomatic = false) {
         selectedConversation = newConversation;
+        noChat = false;
         loadingChatPanel = true;
         if(!isAutomatic) chatOpen = true;
         //Load conversation
@@ -176,7 +177,9 @@
                 return lastOpenedConversation
             }
             else{
-                return viewConversations.length >= 1 ? viewConversations[0] : undefined;
+                let res = viewConversations.length >= 1 ? viewConversations[0] : undefined;
+                if(res == undefined) noChat = true
+                return res;
             }
         }
     }
@@ -507,7 +510,7 @@
         {/if}
         {#if noChat}
             <div class="no-chat">
-                <span>No conversation availible</span>
+                <span>No conversation selected</span>
             </div>
         {/if}
         <div class="chat-profile">

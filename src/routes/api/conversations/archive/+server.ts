@@ -27,9 +27,6 @@ export async function POST(event:any) {
     if(currentConversation == null) {
         return getResponse_BadRequest();
     }
-    if(!(currentConversation.state == ConversationState.Accepted || currentConversation.state == ConversationState.Rejected)) {
-        return getResponse_BadRequest();
-    }
 
     let update;
     if (currentUser.type == UserRole.ServiceProvider) {
