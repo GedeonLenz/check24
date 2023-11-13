@@ -18,6 +18,7 @@ a {
     text-decoration: none !important;
     padding: 0;
     margin: 0;
+    color: var(--base-color) !important;
 }
 
 .chats-topbar {
@@ -1038,4 +1039,8 @@ textarea {
     font-size: 15px;
     font-weight: 600;
     color: var(--base-color);
+}
+
+#newchat {
+    margin-left: 18px;
 }
