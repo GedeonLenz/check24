@@ -589,7 +589,6 @@
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Pending customer decision</span>
                                         <p class="text">{message.text}</p>
-                                        <button disabled class="payment" on:click={() => {window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", '_blank')}}>Collect Payment</button>
                                     </div>
                                 </div>
                             {:else}
@@ -610,7 +609,6 @@
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Accepted Quote</span>
                                         <p class="text">{message.text}</p>
-                                        <button disabled class="payment" on:click={() => {window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", '_blank')}}>Collect Payment</button>
                                     </div>
                                 </div>
                             {:else}
@@ -619,7 +617,6 @@
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Accepted Quote</span>
                                         <p class="text">{message.text}</p>
-                                        <button class="payment" on:click={() => {window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", '_blank')}}>Send Payment</button>
                                     </div>
                                 </div>
                             {/if}
@@ -630,7 +627,6 @@
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Rejected Quote</span>
                                         <p class="text">{message.text}</p>
-                                        <button disabled class="payment" on:click={() => {window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", '_blank')}}>Collect Payment</button>
                                     </div>
                                 </div>
                             {:else}
@@ -639,7 +635,6 @@
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Rejected Quote</span>
                                         <p class="text">{message.text}</p>
-                                        <button disabled class="payment" on:click={() => {window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", '_blank')}}>Send Payment</button>
                                     </div>
                                 </div>
                             {/if}

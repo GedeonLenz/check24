@@ -344,7 +344,7 @@ a {
 .message-quote .message-wrapper {
     width: 450px;
     max-width: 450px;
-    min-height: 238px;
+    min-height: 167px;
     height: auto;
     background: #ffffff;
     border: 1px solid #EAEAEA;
@@ -623,7 +623,7 @@ textarea {
     color: #ffffff;
     border-radius: 100px;
     background: rgba(255,0,0,1);
-    z-index: 999;
+    z-index: 9999999;
     left: 50%;
     transform: translateX(-50%);
     font-family: "Helvetica Neue","Arial",sans-serif;

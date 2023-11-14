@@ -102,12 +102,23 @@ export async function getPictureURL(conversation:Conversation,currentUser:User) 
 }
 
 export async function setConversationState(id:string,state:ConversationState) {
+    let data;
+    if(state == ConversationState.Accepted) {
+        data ={
+            "state": state,
+            "dates.updated": getCurrentDateTime(),
+            "dates.accepted": getCurrentDateTime(),
+        }
+    }
+    else{
+        data ={
+            "state": state,
+            "dates.updated": getCurrentDateTime(),
+        }
+    }
     const res = await collection_conversations.updateOne( { _id: new ObjectId(id) },
         {
-            $set: {
-                "state": state,
-                "dates.updated": getCurrentDateTime()
-            }
+            $set: data
         });
     return res.acknowledged;
 }

@@ -98,6 +98,7 @@ export interface Conversation {
         created: string;
         updated: string;
         opened: string;
+        accepted?: string;
         archived?: {
             customer: string,
             serviceprovider:string;
