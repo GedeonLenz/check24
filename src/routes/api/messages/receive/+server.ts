@@ -50,7 +50,7 @@ export async function GET(event:any) {
 }
 
 function maskMessages(conversation:Conversation ,msgs:Message[]) {
-    if(conversation.state == ConversationState.Quoted) {
+    if(conversation.state == ConversationState.Quoted || conversation.state == ConversationState.Chatting) {
         return msgs.map((msg:Message):Message => {
             if(msg.messageType == MessageType.File) return msg;
             else {
@@ -64,6 +64,26 @@ function maskMessages(conversation:Conversation ,msgs:Message[]) {
 }
 
 function filterContactData(text:string) {
-    //todo mask phonenumbers/email/urls
+    text = maskEmail(text);
+    text = maskURLs(text);
+    text = maskPhone(text);
     return text;
+}
+
+function maskURLs(input:string) {
+    const domainRegex: RegExp = /(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}/g;
+    input = input.replace(domainRegex, (m:string) => '*'.repeat(m.length));
+    return input
+}
+
+function maskPhone(input:string) {
+    const phoneRegex: RegExp = /(\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*)/g;
+    input = input.replace(phoneRegex, (match:string) => match.replace(/\d/g, '*'));
+    return input
+}
+
+function maskEmail(input:string) {
+    const emailRegex: RegExp = /(?<=\w*)[\w\-._\+%]*(?=\w*@)/g;
+    input = input.replace(emailRegex, (m: string) => '*'.repeat(m.length));
+    return input
 }
