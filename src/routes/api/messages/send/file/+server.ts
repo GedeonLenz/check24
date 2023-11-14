@@ -36,8 +36,7 @@ function getExtension(filename:string) {
 function checkFileAllowed(filename:string) {
     let ext = getExtension(filename);
     let allowed = ['jpg','jpeg','gif','bmp','webp','png','wav','mp3','mp4','mov','pdf','txt'];
-    if(allowed.includes(ext.toLowerCase())) return true;
-    return false;
+    return allowed.includes(ext.toLowerCase());
 }
 
 export async function POST(event:any) {
