@@ -83,7 +83,7 @@ function maskPhone(input:string) {
 }
 
 function maskEmail(input:string) {
-    const emailRegex: RegExp = /(?<=\w*)[\w\-._\+%]*(?=\w*@)/g;
+    const emailRegex: RegExp = /(?<=\w*)[\w\-._+%]*(?=\w*@)/g;
     input = input.replace(emailRegex, (m: string) => '*'.repeat(m.length));
     return input
 }
