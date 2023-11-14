@@ -637,13 +637,13 @@
                                 </div>
                             {/if}
                         {:else}
-                            <div class="chat-message {message.sender.username !== currentUser.username ? (message.read == false ? 'message-unread' : '') : ''} {message.sender.username === currentUser.username ? 'message-me' : 'message-other'}">
+                            <div class="chat-message {message.sender.username !== currentUser.username ? (message.read === false ? 'message-unread' : '') : ''} {message.sender.username === currentUser.username ? 'message-me' : 'message-other'}">
                                 <div class="message-wrapper">Unable to load message</div>
                             </div>
                         {/if}
 
                     {:else if message.messageType === MessageType.Accept}
-                        <div class="chat-message message-accept {message.sender.username !== currentUser.username ? (message.read == false ? 'message-unread' : '') : ''} {message.sender.username === currentUser.username ? 'message-me' : 'message-other'}">
+                        <div class="chat-message message-accept {message.sender.username !== currentUser.username ? (message.read === false ? 'message-unread' : '') : ''} {message.sender.username === currentUser.username ? 'message-me' : 'message-other'}">
                             <div class="message-wrapper">
                                 <div class="icon-wrapper">
                                     <i class="fa-regular fa-circle-check"></i>
@@ -655,7 +655,7 @@
                             </div>
                         </div>
                     {:else if message.messageType === MessageType.Reject}
-                        <div class="chat-message message-decline {message.sender.username !== currentUser.username ? (message.read == false ? 'message-unread' : '') : ''} {message.sender.username === currentUser.username ? 'message-me' : 'message-other'}">
+                        <div class="chat-message message-decline {message.sender.username !== currentUser.username ? (message.read === false ? 'message-unread' : '') : ''} {message.sender.username === currentUser.username ? 'message-me' : 'message-other'}">
                             <div class="message-wrapper">
                                 <div class="icon-wrapper">
                                     <i class="fa-regular fa-circle-xmark"></i>
@@ -667,7 +667,7 @@
                             </div>
                         </div>
                     {:else if message.messageType === MessageType.Standard}
-                        <div class="chat-message {message.sender.username !== currentUser.username ? (message.read == false ? 'message-unread' : '') : ''} {message.sender.username === currentUser.username ? 'message-me' : 'message-other'}">
+                        <div class="chat-message {message.sender.username !== currentUser.username ? (message.read === false ? 'message-unread' : '') : ''} {message.sender.username === currentUser.username ? 'message-me' : 'message-other'}">
                             <div class="message-wrapper">{message.text}</div>
                         </div>
                     {/if}
