@@ -183,7 +183,6 @@ a {
     margin-left: 10px;
     margin-right: 10px;
     border: 1px solid #eeeeee;
-    overflow:hidden;
 }
 .chat-picture img, .chat-bar-picture img {
     display: block;
@@ -954,13 +953,13 @@ textarea {
 
 @keyframes jump {
     0% {
-        bottom: 0px;
+        bottom: 0;
     }
     20% {
         bottom: 5px;
     }
     40% {
-        bottom: 0px;
+        bottom: 0;
     }
 }
 
