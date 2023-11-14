@@ -82,6 +82,7 @@ export async function POST(event:any) {
             //Insert starting message
             let sent: Message_Offer | null = await _sendInitMessage(currentUser,request.initMessage,conversation)
             if(sent != null) {
+                conversation.state = ConversationState.Quoted;
                 let conversationEntry:ConversationEntry = {conversationObj:conversation,lastMessage: sent, unreadCount:0,pictureURL:await getPictureURL(conversation,currentUser)};
                 let data:ConversationInsertResponse = {
                     conversation: conversationEntry,
