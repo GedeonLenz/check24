@@ -628,7 +628,7 @@
                                     </div>
                                 </div>
                             {:else}
-                                <div class="chat-message message-quote message-quote-sent message-quote-sent-customer {message.sender.username !== currentUser.username ? (message.read == false ? 'message-unread' : '') : ''}">
+                                <div class="chat-message message-quote message-quote-sent message-quote-sent-customer {message.sender.username !== currentUser.username ? (message.read === false ? 'message-unread' : '') : ''}">
                                     <div class="message-wrapper">
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Rejected Quote</span>
