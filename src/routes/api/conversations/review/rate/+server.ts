@@ -1,6 +1,6 @@
-import {collection_conversations, collection_messages} from "$db/collections";
+import {collection_conversations} from "$db/collections";
 import {ObjectId} from "mongodb";
-import {type ConversationReviewRatingRequest, type ConversationUpdateRequest, UserRole} from "../../../types";
+import {type ConversationReviewRatingRequest, UserRole} from "../../../types";
 import {checkUserRole, getUser} from "../../../auth/auth";
 import {
     getResponse_InternalError,

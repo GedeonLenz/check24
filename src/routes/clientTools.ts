@@ -1,7 +1,8 @@
 import type {
     ConversationInsertRequest,
-    ConversationListResponse, ConversationReviewRatingRequest,
-    ConversationUpdateRequest, Message,
+    ConversationListResponse,
+    ConversationReviewRatingRequest,
+    ConversationUpdateRequest,
     Message_AcceptRequest,
     Message_FileRequest,
     Message_OfferRequest,
@@ -16,7 +17,7 @@ import {MessageType, UserRole} from "./api/types";
 
 export async function sendPOST(url:string,data:object) {
     try {
-        const response = await fetch(url, {
+        const response:Response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -182,10 +183,10 @@ export async function sendFileMessage(sender:User, conversationID:string, file:F
     formData.append('file', file);
 
     const xhr = new XMLHttpRequest();
-    const response = await new Promise((resolve) => {
+    return await new Promise((resolve) => {
         xhr.upload.addEventListener("progress", (event) => {
             if (event.lengthComputable) {
-                callback((event.loaded / event.total)*100);
+                callback((event.loaded / event.total) * 100);
             }
         });
         xhr.addEventListener("loadend", () => {
@@ -194,7 +195,6 @@ export async function sendFileMessage(sender:User, conversationID:string, file:F
         xhr.open("POST", "/api/messages/send/file", true);
         xhr.send(formData);
     });
-    return response;
 }
 
 
@@ -225,6 +225,5 @@ export function getFileExtension(filePath:string) {
 
 export function getFileName(filePath:string) {
     const pathParts = filePath.split(/[\/\\]/);
-    const fileNameWithExtension = pathParts[pathParts.length - 1];
-    return fileNameWithExtension;
+    return pathParts[pathParts.length - 1];
 }
