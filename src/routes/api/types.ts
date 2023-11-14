@@ -2,7 +2,6 @@
 //---------Users------------
 /***************************/
 //Enums
-import type {ObjectId} from "mongodb";
 
 export enum UserRole {
     Customer="customer",
@@ -109,7 +108,7 @@ export interface Conversation {
         customer:boolean;
         serviceprovider:boolean;
     }
-};
+}
 //Insertions
 export interface ConversationInsert extends Omit<Conversation, '_id'> {}
 
