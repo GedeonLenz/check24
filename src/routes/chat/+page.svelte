@@ -3,7 +3,6 @@
 </svelte:head>
 <script lang="ts">
     import type {
-        Conversation,
         ConversationEntry,
         ConversationListResponse,
         Message,
@@ -62,8 +61,7 @@
     let noChat = false;
     async function renderConversationList() {
         conversationData = await getConversations(currentUser,searchQuery);
-        noChat = false;
-        if(conversationData.conversations.length == 0) noChat = true;
+        noChat = conversationData.conversations.length == 0;
         //Archive filter
         setArchiveMode(archiveMode);
         //Search filter
@@ -401,7 +399,7 @@
 <style>
     @import './style.css';
 </style>
-{#if chatOpen == true}
+{#if chatOpen === true}
     <style>
         @media screen and (max-width: 720px) {
             .chat-container {
@@ -525,20 +523,20 @@
             </span>
             <span class="chat-title">{selectedConversation !== undefined ? getOtherUsername(currentUser,selectedConversation.conversationObj.usernames) : ''}</span>
             {#if
-                selectedConversation != undefined &&
+                selectedConversation !== undefined &&
                 (
-                    currentUser.type == UserRole.Customer &&
+                    currentUser.type === UserRole.Customer &&
                     (
-                        selectedConversation.conversationObj.archived == undefined ||
-                        (selectedConversation.conversationObj.archived != undefined && selectedConversation.conversationObj.archived.customer == undefined) ||
-                        (selectedConversation.conversationObj.archived != undefined && selectedConversation.conversationObj.archived.customer != undefined && selectedConversation.conversationObj.archived.customer === false)
+                        selectedConversation.conversationObj.archived === undefined ||
+                        (selectedConversation.conversationObj.archived !== undefined && selectedConversation.conversationObj.archived.customer === undefined) ||
+                        (selectedConversation.conversationObj.archived !== undefined && selectedConversation.conversationObj.archived.customer !== undefined && selectedConversation.conversationObj.archived.customer === false)
                     )
                 ||
-                    currentUser.type == UserRole.ServiceProvider &&
+                    currentUser.type === UserRole.ServiceProvider &&
                     (
-                        selectedConversation.conversationObj.archived == undefined ||
-                        (selectedConversation.conversationObj.archived != undefined && selectedConversation.conversationObj.archived.serviceprovider == undefined) ||
-                        (selectedConversation.conversationObj.archived != undefined && selectedConversation.conversationObj.archived.serviceprovider != undefined && selectedConversation.conversationObj.archived.serviceprovider === false)
+                        selectedConversation.conversationObj.archived === undefined ||
+                        (selectedConversation.conversationObj.archived !== undefined && selectedConversation.conversationObj.archived.serviceprovider === undefined) ||
+                        (selectedConversation.conversationObj.archived !== undefined && selectedConversation.conversationObj.archived.serviceprovider !== undefined && selectedConversation.conversationObj.archived.serviceprovider === false)
                     )
                 )}
                 <div class="icon-wrapper" on:click={archiveChat}><i class="fa-solid fa-box-archive"></i></div>

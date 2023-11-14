@@ -966,7 +966,7 @@ textarea {
 .chat-editor .sendprogress {
     display: block;
     position: absolute;
-    width: 0%;
+    width: 0;
     height: 3px;
     background: var(--button-color);
     margin-top: -3px;
