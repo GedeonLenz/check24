@@ -1,6 +1,6 @@
 import type {
     ConversationInsertRequest,
-    ConversationListResponse,
+    ConversationListResponse, ConversationReviewRatingRequest,
     ConversationUpdateRequest, Message,
     Message_AcceptRequest,
     Message_FileRequest,
@@ -80,6 +80,27 @@ export async function archiveConversation(conversationID:string) {
         conversationID: conversationID
     }
     let response:boolean | Response = await sendPOST("/api/conversations/archive",message);
+    return response;
+}
+
+export async function requestConversationReview(conversationID:string) {
+    if(conversationID == '') return false;
+    let message:ConversationUpdateRequest = {
+        conversationID: conversationID
+    }
+    let response:boolean | Response = await sendPOST("/api/conversations/review/request",message);
+    return response;
+}
+
+export async function rateConversation(conversationID:string, rating:number) {
+    if (rating < 1 || rating > 5 || conversationID == '') return false;
+    let message:ConversationReviewRatingRequest = {
+        conversationID: conversationID,
+        review: {
+            rating: rating
+        }
+    }
+    let response:boolean | Response = await sendPOST("/api/conversations/review/rate",message);
     return response;
 }
 

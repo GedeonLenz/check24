@@ -51,6 +51,13 @@ export interface ConversationUpdateRequest {
     conversationID: string;
 }
 
+export interface ConversationReviewRatingRequest {
+    conversationID: string;
+    review: {
+        rating: number;
+    }
+}
+
 //--------Responses--------//
 //Insert
 export interface ConversationInsertResponse {
@@ -96,6 +103,11 @@ export interface Conversation {
             serviceprovider:string;
         }
     };
+    review?: {
+        requested: boolean;
+        reviewed: boolean;
+        rating: number;
+    }
     archived?: {
         customer:boolean;
         serviceprovider:boolean;
