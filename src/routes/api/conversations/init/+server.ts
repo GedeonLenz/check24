@@ -6,14 +6,14 @@ import type {
     ConversationInsertResponse,
     Message_Offer
 } from "../../types";
-import {ConversationState, isConversationRequest, type Message, type UserObj, UserRole} from "../../types";
+import {ConversationState, isConversationRequest, type UserObj, UserRole} from "../../types";
 import {
     extractFindData,
-    getCurrentDateTime, getLastMessage, getPictureURL,
+    getCurrentDateTime, getPictureURL,
     getResponse_BadRequest,
     getResponse_InternalError,
     getResponse_Success,
-    getResponse_Unauthorized, getUnreadCount
+    getResponse_Unauthorized,
 } from "../../tools";
 import {_sendInitMessage} from "../../messages/send/+server";
 import {checkUserRole, getUser} from "../../auth/auth";
