@@ -19,13 +19,13 @@ import * as crypto from "crypto";
 import AWS from 'aws-sdk';
 
 import {
-    SECURE_STORAGE_S3_BUCKET_NAME,
-    SECURE_STORAGE_S3_ACCESSKEY,
-    SECURE_STORAGE_S3_SECRETKEY,
-    SECURE_STORAGE_S3_REGION,
-    SECURE_STORAGE_S3_DIRECTORY,
-    SECURE_STORAGE_S3_PUBLIC_URL,
-    SECURE_STORAGE_S3_ENDPOINT
+    SECRET_STORAGE_S3_BUCKET_NAME,
+    SECRET_STORAGE_S3_ACCESSKEY,
+    SECRET_STORAGE_S3_SECRETKEY,
+    SECRET_STORAGE_S3_REGION,
+    SECRET_STORAGE_S3_DIRECTORY,
+    SECRET_STORAGE_S3_PUBLIC_URL,
+    SECRET_STORAGE_S3_ENDPOINT
 } from "$env/static/private";
 
 function getExtension(filename:string) {
@@ -106,16 +106,16 @@ export async function POST(event:any) {
             }
 
             const s3 = new AWS.S3({
-                accessKeyId: SECURE_STORAGE_S3_ACCESSKEY,
-                secretAccessKey: SECURE_STORAGE_S3_SECRETKEY,
-                region: SECURE_STORAGE_S3_REGION,
-                endpoint: SECURE_STORAGE_S3_ENDPOINT
+                accessKeyId: SECRET_STORAGE_S3_ACCESSKEY,
+                secretAccessKey: SECRET_STORAGE_S3_SECRETKEY,
+                region: SECRET_STORAGE_S3_REGION,
+                endpoint: SECRET_STORAGE_S3_ENDPOINT
             });
 
             let directoryName = randomString;
-            let s3ObjectKey = SECURE_STORAGE_S3_DIRECTORY + directoryName;
+            let s3ObjectKey = SECRET_STORAGE_S3_DIRECTORY + directoryName;
             const params2 = {
-                Bucket: SECURE_STORAGE_S3_BUCKET_NAME,
+                Bucket: SECRET_STORAGE_S3_BUCKET_NAME,
                 Key: s3ObjectKey,
                 Body: '',
             };
@@ -123,7 +123,7 @@ export async function POST(event:any) {
 
             s3ObjectKey =  s3ObjectKey+"/" + file.name;
             const params = {
-                Bucket: SECURE_STORAGE_S3_BUCKET_NAME,
+                Bucket: SECRET_STORAGE_S3_BUCKET_NAME,
                 Key: s3ObjectKey,
                 Body: Buffer.from(await file.arrayBuffer()),
             };
@@ -135,7 +135,7 @@ export async function POST(event:any) {
                 return getResponse_InternalError();
             }
 
-            let finalURL = SECURE_STORAGE_S3_PUBLIC_URL+s3ObjectKey
+            let finalURL = SECRET_STORAGE_S3_PUBLIC_URL+s3ObjectKey
 
             //Insert DB message
             let messageToInsert:Message_FileInsert = {
