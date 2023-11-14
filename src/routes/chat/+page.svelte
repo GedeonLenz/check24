@@ -557,7 +557,7 @@
                 {#each messages as message}
                     {#if message.messageType === MessageType.File}
                         {#if ['jpg','jpeg','gif','webp','png'].includes(getFileExtension(message.filePath))}
-                            <div class="chat-message message-image {message.sender.username !== currentUser.username ? (message.read == false ? 'message-unread' : '') : ''} {message.sender.username === currentUser.username ? 'message-me' : 'message-other'}">
+                            <div class="chat-message message-image {message.sender.username !== currentUser.username ? (message.read === false ? 'message-unread' : '') : ''} {message.sender.username === currentUser.username ? 'message-me' : 'message-other'}">
                                 <a href="{message.filePath}" target="_blank">
                                     <div class="message-wrapper">
                                         <img src="{message.filePath}" alt="image message">
@@ -565,7 +565,7 @@
                                 </a>
                             </div>
                         {:else}
-                            <div class="chat-message message-file {message.sender.username !== currentUser.username ? (message.read == false ? 'message-unread' : '') : ''} {message.sender.username === currentUser.username ? 'message-me' : 'message-other'}">
+                            <div class="chat-message message-file {message.sender.username !== currentUser.username ? (message.read === false ? 'message-unread' : '') : ''} {message.sender.username === currentUser.username ? 'message-me' : 'message-other'}">
                                 <a href="{message.filePath}" download>
                                     <div class="message-wrapper">
                                         <div class="icon-wrapper">
@@ -580,9 +580,9 @@
                             </div>
                         {/if}
                     {:else if message.messageType === MessageType.Offer}
-                        {#if selectedConversation != undefined && (selectedConversation.conversationObj.state === ConversationState.Quoted || selectedConversation.conversationObj.state === ConversationState.Chatting)}
+                        {#if selectedConversation !== undefined && (selectedConversation.conversationObj.state === ConversationState.Quoted || selectedConversation.conversationObj.state === ConversationState.Chatting)}
                             {#if message.sender.username === currentUser.username}
-                                <div class="chat-message message-quote message-quote-sent {message.sender.username !== currentUser.username ? (message.read == false ? 'message-unread' : '') : ''}">
+                                <div class="chat-message message-quote message-quote-sent {message.sender.username !== currentUser.username ? (message.read === false ? 'message-unread' : '') : ''}">
                                     <div class="message-wrapper">
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Pending customer decision</span>
@@ -590,7 +590,7 @@
                                     </div>
                                 </div>
                             {:else}
-                                <div class="chat-message message-quote {message.sender.username !== currentUser.username ? (message.read == false ? 'message-unread' : '') : ''}">
+                                <div class="chat-message message-quote {message.sender.username !== currentUser.username ? (message.read === false ? 'message-unread' : '') : ''}">
                                     <div class="message-wrapper">
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Received Quote</span>
@@ -600,9 +600,9 @@
                                     </div>
                                 </div>
                             {/if}
-                        {:else if selectedConversation != undefined && (selectedConversation.conversationObj.state === ConversationState.Accepted)}
+                        {:else if selectedConversation !== undefined && (selectedConversation.conversationObj.state === ConversationState.Accepted)}
                             {#if message.sender.username === currentUser.username}
-                                <div class="chat-message message-quote message-quote-sent {message.sender.username !== currentUser.username ? (message.read == false ? 'message-unread' : '') : ''}">
+                                <div class="chat-message message-quote message-quote-sent {message.sender.username !== currentUser.username ? (message.read === false ? 'message-unread' : '') : ''}">
                                     <div class="message-wrapper">
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Accepted Quote</span>
@@ -610,7 +610,7 @@
                                     </div>
                                 </div>
                             {:else}
-                                <div class="chat-message message-quote message-quote-sent message-quote-sent-customer {message.sender.username !== currentUser.username ? (message.read == false ? 'message-unread' : '') : ''}">
+                                <div class="chat-message message-quote message-quote-sent message-quote-sent-customer {message.sender.username !== currentUser.username ? (message.read === false ? 'message-unread' : '') : ''}">
                                     <div class="message-wrapper">
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Accepted Quote</span>
@@ -618,9 +618,9 @@
                                     </div>
                                 </div>
                             {/if}
-                        {:else if selectedConversation != undefined && (selectedConversation.conversationObj.state === ConversationState.Rejected)}
+                        {:else if selectedConversation !== undefined && (selectedConversation.conversationObj.state === ConversationState.Rejected)}
                             {#if message.sender.username === currentUser.username}
-                                <div class="chat-message message-quote message-quote-sent {message.sender.username !== currentUser.username ? (message.read == false ? 'message-unread' : '') : ''}">
+                                <div class="chat-message message-quote message-quote-sent {message.sender.username !== currentUser.username ? (message.read === false ? 'message-unread' : '') : ''}">
                                     <div class="message-wrapper">
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Rejected Quote</span>
