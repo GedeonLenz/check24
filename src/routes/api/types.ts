@@ -19,14 +19,6 @@ export interface UserObj {
 
 export interface User extends Omit<Omit<UserObj, '_id'>, 'passwordhash'> {}
 
-function isUser(obj: any): obj is User {
-    return (
-        typeof obj === "object" &&
-        typeof obj.username === "string" &&
-        typeof obj.type === "string"
-    );
-}
-
 /***************************/
 //-------Conversations-------
 /***************************/
