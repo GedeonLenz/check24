@@ -13,15 +13,23 @@
     import {ConversationState, MessageType, UserRole} from "../api/types";
     import {
         archiveConversation,
+        dateDiff, dateStringToDate,
         getConversations,
-        getFileExtension, getFileName,
+        getFileExtension,
+        getFileName,
         getMessages,
         getOtherUsername,
         initConversation,
-        openConversation, sendAcceptMessage, sendFileMessage, sendRejectMessage, sendTextMessage
+        openConversation,
+        requestConversationReview,
+        sendAcceptMessage,
+        sendFileMessage,
+        sendRejectMessage,
+        sendTextMessage
     } from "../clientTools";
     import {onMount} from "svelte";
     import '@fortawesome/fontawesome-free/css/all.min.css'
+    import {getCurrentDateTime} from "../clientTools";
 
     export let data;
 
@@ -50,20 +58,20 @@
 
     let JOB_updateCourseList;
     async function fetchData() {
-        await renderConversationList();
+        await renderConversationList(true);
         loadingChatList = false;
         lastOpenedConversation = conversationData.lastOpened;
         let firstSelection = getSelectedConversation();
         if(firstSelection != undefined) await openConversationEntry(getSelectedConversation() as ConversationEntry,true);
-        JOB_updateCourseList = setInterval(renderConversationList, 15000);
+        JOB_updateCourseList = setInterval(() => {renderConversationList(false)}, 15000);
     }
     let archiveMode = false;
     let noChat = false;
-    async function renderConversationList() {
+    async function renderConversationList(runArchive:boolean = false) {
+        noChat = selectedConversation == undefined;
         conversationData = await getConversations(currentUser,searchQuery);
-        noChat = conversationData.conversations.length == 0;
         //Archive filter
-        setArchiveMode(archiveMode);
+        if(runArchive) setArchiveMode(archiveMode);
         //Search filter
         visibleConversations = viewConversations;
         await applySearch();
@@ -80,7 +88,7 @@
     }
 
 
-    function setArchiveMode(showArchive:boolean) {
+    function setArchiveMode(showArchive:boolean,init:boolean=false) {
         archiveMode = showArchive;
         if(showArchive) {
             viewConversations = conversationData.conversations.filter(
@@ -123,8 +131,6 @@
         insertUnreadBanner();
         scrollChat();
         loadingChatPanel = false;
-        //Rerender conversation list
-        renderConversationList();
     }
 
     let messages:Message[] = [];
@@ -252,7 +258,7 @@
         }
         else {
             showSuccess("Your quote has been sent.");
-            await renderConversationList();
+            await renderConversationList(true);
             let newEntry = await res.json();
             await openConversationEntry(newEntry.data.conversation,true);
         }
@@ -287,8 +293,8 @@
             }
             else{
                 showSuccess('Chat archived');
-                openConversationEntry(selectedConversation,true);
-                chatOpen = false;
+                selectedConversation = undefined;
+                await renderConversationList(true);
             }
         }
     }
@@ -391,6 +397,19 @@
                     showError('An Error occurred while trying to upload you file. Please try again later.');
                 }
                 resetProgressBar();
+            }
+        }
+    }
+
+    async function requestReview() {
+        if(selectedConversation !== undefined) {
+            let res = await requestConversationReview(selectedConversation.conversationObj._id);
+            if(res != false && res.status == 200) {
+                showSuccess('Review requested');
+                await loadMessages();
+            }
+            else{
+                showError('An Error occurred while trying to send your message. Please try again later.');
             }
         }
     }
@@ -506,20 +525,13 @@
                 </span>
             </div>
         {/if}
-        {#if noChat}
-            <div class="no-chat">
-                <span>No conversation selected</span>
-            </div>
-        {/if}
+        <div class="no-chat" style="display: {noChat ? 'block' : 'none'}">
+            <span>No conversation selected</span>
+        </div>
         <div class="chat-profile">
             <div class="icon-wrapper-back" on:click={() => {chatOpen = false}}><i class="archive-disabled fa-solid fa-angle-left"></i></div>
             <span class="chat-bar-picture">
-                <img src="/user.png" alt="profile-icon">
-                {#if selectedConversation !== undefined && selectedConversation.pictureURL !== ""}
-                   <img src="{selectedConversation.pictureURL}" alt="profile-icon">
-                {:else}
-                    <img src="/user.png" alt="profile-icon">
-                {/if}
+                <img src="{selectedConversation !== undefined && selectedConversation.pictureURL !== '' ? selectedConversation.pictureURL : '/user.png'}" alt="profile-icon">
             </span>
             <span class="chat-title">{selectedConversation !== undefined ? getOtherUsername(currentUser,selectedConversation.conversationObj.usernames) : ''}</span>
             {#if
@@ -607,6 +619,9 @@
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Accepted Quote</span>
                                         <p class="text">{message.text}</p>
+                                        {#if selectedConversation.conversationObj.dates.accepted !== undefined && dateStringToDate(getCurrentDateTime()).getTime() > dateStringToDate(selectedConversation.conversationObj.dates.accepted).getTime() && dateDiff(selectedConversation.conversationObj.dates.accepted,getCurrentDateTime()) >= 7}
+                                            <button on:click={requestReview} class="requestreview">Request Review</button>
+                                        {/if}
                                     </div>
                                 </div>
                             {:else}

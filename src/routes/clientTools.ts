@@ -227,3 +227,25 @@ export function getFileName(filePath:string) {
     const pathParts = filePath.split(/[\/\\]/);
     return pathParts[pathParts.length - 1];
 }
+
+export function getCurrentDateTime(): string {
+    const now = new Date();
+    return now.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+}
+
+export function dateStringToDate(dateString:string) {
+    const [datePart, timePart] = dateString.split(', ');
+    const [month, day, year] = datePart.split('/');
+    const [hour, minute, second] = timePart.split(':');
+    return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`);
+}
+
+export function dateDiff(d1:string,d2:string) {
+    let d1o:Date = dateStringToDate(d1);
+    let d2o:Date = dateStringToDate(d2);
+    const diffTime:number = Math.abs(d1o.getTime() - d2o.getTime());
+    console.log(d1)
+    console.log(d1)
+    console.log(diffTime)
+    return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+}
