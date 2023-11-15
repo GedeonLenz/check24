@@ -88,7 +88,7 @@
     }
 
 
-    function setArchiveMode(showArchive:boolean,init:boolean=false) {
+    function setArchiveMode(showArchive:boolean) {
         archiveMode = showArchive;
         if(showArchive) {
             viewConversations = conversationData.conversations.filter(
