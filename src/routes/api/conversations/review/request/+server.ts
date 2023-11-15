@@ -3,6 +3,7 @@ import {ObjectId} from "mongodb";
 import {type ConversationUpdateRequest, UserRole} from "../../../types";
 import {checkUserRole, getUser} from "../../../auth/auth";
 import {
+    getResponse_BadRequest,
     getResponse_InternalError,
     getResponse_Success,
     getResponse_Unauthorized,
@@ -24,17 +25,17 @@ export async function POST(event:any) {
         return getResponse_Unauthorized();
     }
 
-    const res1 = await collection_conversations.updateOne( { _id: new ObjectId(request.conversationID) },
+    const res1 = await collection_conversations.updateOne( { _id: new ObjectId(request.conversationID), "review.requested": { $ne: true } },
         {
             $set: {
                 "review.requested": true
             }
         });
 
-    if(res1.acknowledged){
+    if(res1.modifiedCount >= 1){
         return getResponse_Success()
     }
     else{
-        return getResponse_InternalError();
+        return getResponse_BadRequest();
     }
 }

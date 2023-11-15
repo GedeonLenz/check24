@@ -1,4 +1,5 @@
 import type {
+    ConversationEntry,
     ConversationInsertRequest,
     ConversationListResponse,
     ConversationReviewRatingRequest,
@@ -93,7 +94,7 @@ export async function requestConversationReview(conversationID:string) {
     return response;
 }
 
-export async function rateConversation(conversationID:string, rating:number) {
+export async function reviewConversation(conversationID:string, rating:number) {
     if (rating < 1 || rating > 5 || conversationID == '') return false;
     let message:ConversationReviewRatingRequest = {
         conversationID: conversationID,
@@ -229,23 +230,29 @@ export function getFileName(filePath:string) {
 }
 
 export function getCurrentDateTime(): string {
-    const now = new Date();
-    return now.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    return new Date().toISOString();
 }
 
-export function dateStringToDate(dateString:string) {
-    const [datePart, timePart] = dateString.split(', ');
-    const [month, day, year] = datePart.split('/');
-    const [hour, minute, second] = timePart.split(':');
-    return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`);
+export function dateStringToDate(isoDateTimeString:string) {
+    return new Date(isoDateTimeString);
 }
 
 export function dateDiff(d1:string,d2:string) {
     let d1o:Date = dateStringToDate(d1);
     let d2o:Date = dateStringToDate(d2);
     const diffTime:number = Math.abs(d1o.getTime() - d2o.getTime());
-    console.log(d1)
-    console.log(d1)
-    console.log(diffTime)
     return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+}
+
+export function getReviewRequested(currentConversation:ConversationEntry) {
+    let conv = currentConversation.conversationObj
+    return conv.review != undefined && conv.review.requested != undefined && conv.review?.requested == true;
+}
+
+export function getReview(currentConversation:ConversationEntry) {
+    let conv = currentConversation.conversationObj
+    if(conv.review != undefined && conv.review.reviewed != undefined && conv.review?.reviewed == true && conv.review.rating != undefined) {
+        return conv.review.rating;
+    }
+    return undefined;
 }

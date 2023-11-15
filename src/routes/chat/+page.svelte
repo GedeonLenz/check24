@@ -18,10 +18,10 @@
         getFileExtension,
         getFileName,
         getMessages,
-        getOtherUsername,
+        getOtherUsername, getReview, getReviewRequested,
         initConversation,
         openConversation,
-        requestConversationReview,
+        requestConversationReview, reviewConversation,
         sendAcceptMessage,
         sendFileMessage,
         sendRejectMessage,
@@ -122,7 +122,6 @@
         //Load conversation
         await loadMessages();
         if(JOB_updateMessages == undefined) JOB_updateMessages = setInterval(loadMessages, 15000);
-
         //Set conversation as opened
         let res = await openConversation(selectedConversation.conversationObj._id);
         if(res == false || res.status != 200) {
@@ -258,8 +257,8 @@
         }
         else {
             showSuccess("Your quote has been sent.");
-            await renderConversationList(true);
             let newEntry = await res.json();
+            await renderConversationList(true);
             await openConversationEntry(newEntry.data.conversation,true);
         }
         quote_username = '';
@@ -409,7 +408,20 @@
                 await loadMessages();
             }
             else{
-                showError('An Error occurred while trying to send your message. Please try again later.');
+                showError('An Error occurred while trying to request a review. Please try again later.');
+            }
+        }
+    }
+
+    async function sendReview(rating:number) {
+        if(selectedConversation !== undefined) {
+            let res = await reviewConversation(selectedConversation.conversationObj._id,rating);
+            if(res != false && res.status == 200) {
+                showSuccess('Review sent');
+                await loadMessages();
+            }
+            else{
+                showError('An Error occurred while trying to send your review. Please try again later.');
             }
         }
     }
@@ -619,7 +631,19 @@
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Accepted Quote</span>
                                         <p class="text">{message.text}</p>
-                                        {#if selectedConversation.conversationObj.dates.accepted !== undefined && dateStringToDate(getCurrentDateTime()).getTime() > dateStringToDate(selectedConversation.conversationObj.dates.accepted).getTime() && dateDiff(selectedConversation.conversationObj.dates.accepted,getCurrentDateTime()) >= 7}
+                                        {#if getReview(selectedConversation) !== undefined}
+                                            <span class="review-desc">Customer {getOtherUsername(currentUser,selectedConversation.conversationObj.usernames)} rated your service with:</span>
+                                            <div class="star-wrapper">
+                                                {#each Array(getReview(selectedConversation)) as _, i (i)}
+                                                    <i id="star-{i+1}" class="star-filled fa-solid fa-star"></i>
+                                                {/each}
+                                                {#each Array(5-getReview(selectedConversation)) as _, i (i)}
+                                                    <i id="star-{getReview(selectedConversation)+i+1}" class="star fa-regular fa-star"></i>
+                                                {/each}
+                                            </div>
+                                        {:else if getReviewRequested(selectedConversation)}
+                                            <span class="notice">You requested a review from customer {getOtherUsername(currentUser,selectedConversation.conversationObj.usernames)}</span>
+                                        {:else if selectedConversation.conversationObj.dates.accepted !== undefined && dateStringToDate(getCurrentDateTime()).getTime() > dateStringToDate(selectedConversation.conversationObj.dates.accepted).getTime() && dateDiff(selectedConversation.conversationObj.dates.accepted,getCurrentDateTime()) >= 7}
                                             <button on:click={requestReview} class="requestreview">Request Review</button>
                                         {/if}
                                     </div>
@@ -630,6 +654,24 @@
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Accepted Quote</span>
                                         <p class="text">{message.text}</p>
+                                        {#if getReview(selectedConversation) != undefined}
+                                            <span class="review-desc">You rated service provider {getOtherUsername(currentUser,selectedConversation.conversationObj.usernames)}'s service with</span>
+                                            <div class="star-wrapper">
+                                                {#each Array(getReview(selectedConversation)) as _, i (i)}
+                                                    <i id="star-{i+1}" class="star-filled fa-solid fa-star"></i>
+                                                {/each}
+                                                {#each Array(5-getReview(selectedConversation)) as _, i (i)}
+                                                    <i id="star-{getReview(selectedConversation)+i+1}" class="star fa-regular fa-star"></i>
+                                                {/each}
+                                            </div>
+                                        {:else if getReviewRequested(selectedConversation)}
+                                            <span class="review-desc">Service provider {getOtherUsername(currentUser,selectedConversation.conversationObj.usernames)} kindly asks you for a review:</span>
+                                            <div class="star-wrapper star-new-review-wrapper">
+                                                {#each Array(5) as _, i (i)}
+                                                    <i id="star-{i+1}" on:click={() => {sendReview(i+1)}} class="star star-click fa-regular fa-star"></i>
+                                                {/each}
+                                            </div>
+                                        {/if}
                                     </div>
                                 </div>
                             {/if}

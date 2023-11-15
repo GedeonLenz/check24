@@ -433,7 +433,7 @@ a {
 }
 
 
-.message-quote .accept, .message-quote .payment, .message-quote .decline {
+.message-quote .accept, .message-quote .requestreview, .message-quote .decline {
     display: block;
     position: relative;
     width: calc(100% - 40px);
@@ -451,19 +451,15 @@ a {
     transform: scale(1);
 }
 
-.message-quote .accept, .message-quote .payment {
+.message-quote .accept, .message-quote .requestreview {
     background: var(--button-color);
     color: #ffffff;
 }
-.message-quote .payment {
+.message-quote .requestreview {
     margin-bottom: 20px;
 }
-.message-quote .payment:disabled {
-    background: rgba(15, 90, 239, 0.5);
-    cursor: not-allowed;
-}
 
-.message-quote .payment:not(:disabled):hover {
+.message-quote .requestreview:hover {
     background: #0c4ccb;
     transform: scale(1.01);
 }
@@ -483,6 +479,31 @@ a {
 .message-quote .decline:hover {
     background: #f8f8f8;
     transform: scale(1.01);
+}
+
+.message-quote .notice {
+    display: block;
+    position: relative;
+    width: calc(100% - 20px);
+    height: 50px;
+    line-height: 50px;
+    border-radius: 10px;
+    padding-left: 15px;
+    border: none;
+    font-family: "Helvetica Neue","Arial",sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    margin-left: 10px;
+    margin-right: 10px;
+    transition: 0.2s;
+    transform: scale(1);
+    background: rgba(15, 90, 239, 0.66);
+    border-left: 10px solid #0F5AEFFF;
+    border-right: 10px solid #0F5AEFFF;
+    color: #ffffff;
+    text-align:center;
 }
 
 
@@ -1041,4 +1062,41 @@ textarea {
 
 #newchat {
     margin-left: 18px;
+}
+
+.star-wrapper {
+    display: flex;
+    position: relative;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    row-gap: 10px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.review-desc {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: auto;
+    color: #6b6b6b;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.star-wrapper .star, .star-wrapper .star-filled  {
+    color: var(--button-color);
+    font-size: 20px;
+}
+.star-click {
+    cursor: pointer !important;
+    border-radius: 100px;
+}
+.star-click:hover {
+    color: #093fa9;
 }
