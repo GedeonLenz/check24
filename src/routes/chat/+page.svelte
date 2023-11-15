@@ -654,7 +654,7 @@
                                         <span class="price">{message.details.price}€</span>
                                         <span class="status">Accepted Quote</span>
                                         <p class="text">{message.text}</p>
-                                        {#if getReview(selectedConversation) != undefined}
+                                        {#if getReview(selectedConversation) !== undefined}
                                             <span class="review-desc">You rated service provider {getOtherUsername(currentUser,selectedConversation.conversationObj.usernames)}'s service with</span>
                                             <div class="star-wrapper">
                                                 {#each Array(getReview(selectedConversation)) as _, i (i)}

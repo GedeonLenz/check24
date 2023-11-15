@@ -4,7 +4,6 @@ import {type ConversationUpdateRequest, UserRole} from "../../../types";
 import {checkUserRole, getUser} from "../../../auth/auth";
 import {
     getResponse_BadRequest,
-    getResponse_InternalError,
     getResponse_Success,
     getResponse_Unauthorized,
     isUserConversationParticipant
