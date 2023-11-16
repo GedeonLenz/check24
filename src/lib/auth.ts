@@ -2,7 +2,7 @@ import {redirect, type Cookies} from '@sveltejs/kit';
 import jwt from "jsonwebtoken";
 import {SECRET_JWT_KEY} from "$env/static/private";
 import type {User, UserObj, UserRole} from "./types";
-import {collection_auth, collection_conversations} from "$db/collections";
+import {collection_auth} from "$db/collections";
 import {extractFindData} from "$lib/tools/serverTools";
 
 export async function generateJWT(username:string,type:UserRole,pictureURL:string = "") {

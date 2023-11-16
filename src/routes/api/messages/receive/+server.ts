@@ -9,8 +9,7 @@ import {
     getResponse_Unauthorized,
     isUserConversationParticipant, maskMessages
 } from "$lib/tools/serverTools";
-import type {ChatMessagesRequest, ChatMessagesResponse, Conversation, Message, TextMessage} from "$lib/types";
-import {ConversationState, MessageType} from "$lib/types";
+import type {ChatMessagesRequest, ChatMessagesResponse, Conversation, Message} from "$lib/types";
 
 export async function GET(event:any) {
     let currentUser = await getUser(event.cookies);

@@ -1,6 +1,6 @@
-import {collection_auth, collection_conversations} from "$db/collections";
+import {collection_conversations} from "$db/collections";
 import {checkUserRole, getUser, userExists} from "$lib/auth";
-import {ConversationState, isConversationRequest, type UserObj, UserRole} from "$lib/types";
+import {ConversationState, isConversationRequest, UserRole} from "$lib/types";
 import {
     checkExistingConversation,
     getCurrentDateTime, getPictureURL,
