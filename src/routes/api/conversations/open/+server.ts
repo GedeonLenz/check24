@@ -4,7 +4,7 @@ import {
     getCurrentDateTime, getResponse_InternalError, getResponse_Success,
     getResponse_Unauthorized, isUserConversationParticipant
 } from "$lib/serverTools";
-import {checkUserRole, getUser} from "../../auth/auth";
+import {getUser} from "../../auth/auth";
 import {ObjectId} from "mongodb";
 
 export async function POST(event:any) {

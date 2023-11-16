@@ -1,4 +1,4 @@
-import {collection_conversations, collection_messages} from "$db/collections";
+import {collection_messages} from "$db/collections";
 import type {
     Conversation,
     Message_Accept,
@@ -19,7 +19,7 @@ import type {
 } from "../../types";
 import {ConversationState, MessageType, UserRole} from "../../types";
 import {
-    extractFindData, getConversation,
+    getConversation,
     getCurrentDateTime,
     getResponse_BadRequest,
     getResponse_InternalError,
