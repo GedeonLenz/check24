@@ -28,25 +28,15 @@ export async function POST(event:any) {
         return getResponse_BadRequest();
     }
 
-    let update;
-    if (currentUser.type == UserRole.ServiceProvider) {
-        update = {
-            $set: {
-                "archived.serviceprovider": true,
-                "dates.updated": getCurrentDateTime(),
-                "dates.archived.serviceprovider": getCurrentDateTime()
-            }
+    const roleKey = currentUser.type === UserRole.ServiceProvider ? "serviceprovider" : "customer";
+
+    const update = {
+        $set: {
+            [`archived.${roleKey}`]: true,
+            "dates.updated": getCurrentDateTime(),
+            [`dates.archived.${roleKey}`]: getCurrentDateTime()
         }
-    }
-    else{
-        update = {
-            $set: {
-                "archived.customer": true,
-                "dates.updated": getCurrentDateTime(),
-                "dates.archived.customer": getCurrentDateTime()
-            }
-        }
-    }
+    };
     const res = await collection_conversations.updateOne( { _id: new ObjectId(request.conversationID) },update);
     if (res.acknowledged){
         return getResponse_Success();
