@@ -1,18 +1,20 @@
 <script lang="ts">
     import {initConversation} from "$lib/tools/clientTools";
+    import {error, success} from "$lib/chat/notifications";
+    import {currentUser} from "$lib/chat/user";
 
     let newChatVisible = false;
     let quote_username = '';
     let quote_price = 0;
     let quote_text = '';
     async function sendQuote() {
-        let res = await initConversation(currentUser,quote_username,quote_text,quote_price);
+        let res = await initConversation($currentUser,quote_username,quote_text,quote_price);
         newChatVisible = false;
         if(res == false || res.status != 200) {
-            showError('An Error occurred while trying to send your quote. Please try again later.');
+            error.set('An Error occurred while trying to send your quote. Please try again later.');
         }
         else {
-            showSuccess("Your quote has been sent.");
+            success.set("Your quote has been sent.");
             let newEntry = await res.json();
             await renderConversationList(true);
             await openConversationEntry(newEntry.data.conversation,true);

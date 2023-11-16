@@ -135,8 +135,8 @@ export async function getConversations(user:User, receiverFilter:string = '',off
 async function sendMessage(message:MessageRequest) {
     return await sendPOST("/api/messages/send",message);
 }
-export async function sendTextMessage(sender:User, conversationID:string, text:string) {
-    if(conversationID == '' || text == '') return false;
+export async function sendTextMessage(sender:User | undefined, conversationID:string, text:string) {
+    if(sender === undefined || conversationID == '' || text == '') return false;
     let message:Message_StandardRequest = {
         conversationID: conversationID,
         sender: sender,
@@ -146,8 +146,8 @@ export async function sendTextMessage(sender:User, conversationID:string, text:s
     return await sendMessage(message);
 }
 
-export async function sendAcceptMessage(sender:User, conversationID:string, text:string = '') {
-    if(conversationID == '') return false;
+export async function sendAcceptMessage(sender:User | undefined, conversationID:string, text:string = '') {
+    if(sender === undefined ||  conversationID == '') return false;
     let message:Message_AcceptRequest = {
         conversationID: conversationID,
         sender: sender,
@@ -157,8 +157,8 @@ export async function sendAcceptMessage(sender:User, conversationID:string, text
     return await sendMessage(message);
 }
 
-export async function sendRejectMessage(sender:User, conversationID:string, text:string = '') {
-    if(conversationID == '') return false;
+export async function sendRejectMessage(sender:User |undefined, conversationID:string, text:string = '') {
+    if(sender === undefined || conversationID == '') return false;
     let message:Message_RejectRequest = {
         conversationID: conversationID,
         sender: sender,
@@ -168,8 +168,8 @@ export async function sendRejectMessage(sender:User, conversationID:string, text
     return await sendMessage(message);
 }
 
-export async function sendFileMessage(sender:User, conversationID:string, file:File,callback:Function) {
-    if(conversationID == '') return false;
+export async function sendFileMessage(sender:User | undefined, conversationID:string, file:File,callback:Function) {
+    if(sender == undefined || conversationID == '') return false;
 
     let message:Message_FileRequest = {
         conversationID: conversationID,
@@ -213,11 +213,13 @@ export async function getMessages(conversationID:string,offset:number = 0,amount
 /**********************/
 
 //Reviews
-export function getReviewRequested(currentConversation:ConversationEntry) {
+export function getReviewRequested(currentConversation:ConversationEntry | undefined) {
+    if(currentConversation == undefined) return false;
     let conv = currentConversation.conversationObj
     return conv.review != undefined && conv.review.requested != undefined && conv.review?.requested == true;
 }
-export function getReview(currentConversation:ConversationEntry) {
+export function getReview(currentConversation:ConversationEntry | undefined) {
+    if(currentConversation == undefined) return undefined;
     let conv = currentConversation.conversationObj
     if(conv.review != undefined && conv.review.reviewed != undefined && conv.review?.reviewed == true && conv.review.rating != undefined) {
         return conv.review.rating;
@@ -226,7 +228,8 @@ export function getReview(currentConversation:ConversationEntry) {
 }
 
 //Users
-export function getOtherUsername(user:User,usernames:{customer:string,serviceprovider:string}) {
+export function getOtherUsername(user:User | undefined, usernames:{customer:string,serviceprovider:string}) {
+    if (user === undefined) return undefined;
     if(user.type == UserRole.ServiceProvider) {
         return usernames.customer;
     }

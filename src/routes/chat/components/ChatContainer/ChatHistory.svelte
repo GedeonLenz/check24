@@ -8,22 +8,20 @@
     import MessageQuote from "../ChatContainer/ChatHistory/Messages/MessageQuote.svelte";
     import type {Message} from "$lib/types.js";
     import {getMessages} from "$lib/tools/clientTools";
+    import {selectedConversation} from "$lib/chat/conversations";
+    import {messages} from "$lib/chat/messages";
+    import {error} from "$lib/chat/notifications";
 
-    export let currentUser:User;
-    export let selectedConversation:ConversationEntry | undefined
-    export let messages:Message[];
-
-    let messages:Message[] = [];
     async function loadMessages(){
-        if(selectedConversation != undefined) {
-            let before=messages.length;
-            let res = await getMessages(selectedConversation.conversationObj._id);
+        if($selectedConversation != undefined) {
+            let before=$messages.length;
+            let res = await getMessages($selectedConversation.conversationObj._id);
             if(res == false || res.status != 200) {
-                showError('Failed to load conversation!');
+                error.set('Failed to load conversation!');
             }
             else{
-                messages = (await res.json()).data.messages;
-                if (messages.length > before) {
+                messages.set((await res.json()).data.messages);
+                if ($messages.length > before) {
                     scrollBottom();
                 }
             }
@@ -86,17 +84,17 @@
 <div class="chat-history">
     <div class="chat-history-content" id="chat-history-content" >
         <div id="top-placeholder"></div>
-        {#each messages as message}
+        {#each $messages as message}
             {#if message.messageType === MessageType.File}
-                <MessageFile currentUser={currentUser} message={message}></MessageFile>
+                <MessageFile message={message}></MessageFile>
             {:else if message.messageType === MessageType.Offer}
-                <MessageQuote currentUser={currentUser} message={message} selectedConversation={selectedConversation}></MessageQuote>
+                <MessageQuote message={message}></MessageQuote>
             {:else if message.messageType === MessageType.Accept}
-                <MessageAccept currentUser={currentUser} message={message}></MessageAccept>
+                <MessageAccept message={message}></MessageAccept>
             {:else if message.messageType === MessageType.Reject}
-                <MessageReject currentUser={currentUser} message={message}></MessageReject>
+                <MessageReject message={message}></MessageReject>
             {:else if message.messageType === MessageType.Standard}
-                <MessageStandard currentUser={currentUser} message={message}></MessageStandard>
+                <MessageStandard message={message}></MessageStandard>
             {/if}
         {/each}
     </div>

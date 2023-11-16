@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let visible: boolean = false;
+import {noChat} from "$lib/chat/states";
 </script>
 <style>
     .no-chat {
@@ -25,6 +25,6 @@
         color: var(--base-color);
     }
 </style>
-<div class="no-chat" style="display: {visible ? 'block' : 'none'}">
+<div class="no-chat" style="display: {$noChat ? 'block' : 'none'}">
     <span>No conversation selected</span>
 </div>

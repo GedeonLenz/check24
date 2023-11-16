@@ -2,20 +2,14 @@
     <title>Chats</title>
 </svelte:head>
 <script lang="ts">
-    import type {
-        ConversationEntry,
-        ConversationListResponse,
-        User
-    } from "$lib/types";
-    import {onMount} from "svelte";
-    import '@fortawesome/fontawesome-free/css/all.min.css'
+    import '@fortawesome/fontawesome-free/css/all.min.css';
+    import ChatList from "./components/ChatList.svelte";
     import ChatContainer from "./components/ChatContainer.svelte";
     import NewChat from "./components/NewChat.svelte";
     import Notifications from "./components/Notifications.svelte";
-    import ChatList from "./components/ChatList.svelte";
-
+    import {currentUser} from "$lib/chat/user";
     export let data;
-    let currentUser:User = data.currentUser;
+    currentUser.set(data.currentUser);
 </script>
 <style>
     @import './style.css';
@@ -23,6 +17,6 @@
 <div class="page-chats">
     <Notifications></Notifications>
     <NewChat></NewChat>
-    <ChatList currentUser={currentUser}></ChatList>
-    <ChatContainer currentUser={currentUser}></ChatContainer>
+    <ChatList></ChatList>
+    <ChatContainer></ChatContainer>
 </div>

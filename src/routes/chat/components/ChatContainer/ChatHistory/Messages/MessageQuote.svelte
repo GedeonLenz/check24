@@ -3,21 +3,20 @@
     import {ConversationState} from "$lib/types";
     import ReviewPanel from "./MessageQuote/ReviewPanel.svelte";
     import ConsentPanel from "./MessageQuote/ConsentPanel.svelte";
+    import {currentUser} from "$lib/chat/user";
+    import {selectedConversation} from "$lib/chat/conversations";
 
-
-    export let currentUser:User;
     export let message:Message_Offer;
-    export let selectedConversation:ConversationEntry | undefined;
 
-    let mymessage = message.sender.username === currentUser.username;
+    let mymessage = $currentUser !== undefined && message.sender.username === $currentUser.username;
     let unread = !mymessage && message.read === false;
 
-    let isServiceProvider = message.sender.username === currentUser.username;
+    let isServiceProvider = $currentUser !== undefined ? message.sender.username === $currentUser.username : undefined;
 
 
-    let isStateBeginning = (selectedConversation !== undefined && selectedConversation.conversationObj.state === ConversationState.Quoted) || (selectedConversation !== undefined && selectedConversation.conversationObj.state === ConversationState.Chatting);
-    let isStateAccepted = (selectedConversation !== undefined && selectedConversation.conversationObj.state === ConversationState.Accepted);
-    let isStateRejected = (selectedConversation !== undefined && selectedConversation.conversationObj.state === ConversationState.Rejected);
+    let isStateBeginning = ($selectedConversation !== undefined && $selectedConversation.conversationObj.state === ConversationState.Quoted) || ($selectedConversation !== undefined && $selectedConversation.conversationObj.state === ConversationState.Chatting);
+    let isStateAccepted = ($selectedConversation !== undefined && $selectedConversation.conversationObj.state === ConversationState.Accepted);
+    let isStateRejected = ($selectedConversation !== undefined && $selectedConversation.conversationObj.state === ConversationState.Rejected);
     let isValidState = isStateBeginning || isStateAccepted || isStateRejected;
 
     let status = "";
@@ -32,7 +31,7 @@
         else if(isStateRejected) status="Rejected Quote";
     }
 </script>
-{#if selectedConversation !== undefined && isValidState}
+{#if $selectedConversation !== undefined && isValidState}
     <div class="chat-message message-quote message-quote-sent {unread ? 'message-unread' : ''}">
         <div class="message-wrapper">
             <span class="price">{message.details.price}€</span>
@@ -40,10 +39,10 @@
             <p class="text">{message.text}</p>
             {#if isStateBeginning}
                 {#if !isServiceProvider}
-                    <ConsentPanel currentUser={currentUser} selectedConversation={selectedConversation}></ConsentPanel>
+                    <ConsentPanel></ConsentPanel>
                 {/if}
             {:else if isStateAccepted}
-                <ReviewPanel currentUser={currentUser} selectedConversation={selectedConversation} message={message}></ReviewPanel>
+                <ReviewPanel message={message}></ReviewPanel>
             {/if}
         </div>
     </div>

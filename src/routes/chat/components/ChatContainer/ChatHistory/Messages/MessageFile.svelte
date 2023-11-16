@@ -2,14 +2,14 @@
     import type {Message_File, User} from "$lib/types";
     import {getFileName,getFileExtension} from "$lib/tools/clientTools";
     import MessageImage from "./MessageFile/MessageImage.svelte";
+    import {currentUser} from "$lib/chat/user";
     export let message:Message_File;
-    export let currentUser:User;
 
-    let mymessage = message.sender.username === currentUser.username;
+    let mymessage = $currentUser !== undefined && message.sender.username === $currentUser.username;
     let unread = !mymessage && message.read === false;
 </script>
 {#if ['jpg','jpeg','gif','webp','png'].includes(getFileExtension(message.filePath))}
-    <MessageImage currentUser={currentUser} message={message}></MessageImage>
+    <MessageImage message={message}></MessageImage>
 {:else}
     <div class="chat-message message-file {unread ? 'message-unread' : ''} {mymessage ? 'message-me' : 'message-other'}">
         <a href="{message.filePath}" download>

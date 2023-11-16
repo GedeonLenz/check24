@@ -1,12 +1,13 @@
 <script lang="ts">
 import {getOtherUsername} from "$lib/tools/clientTools.js";
 import type {User, ConversationEntry} from "$lib/types";
-import type {Message, Message_Offer, Message_Standard, MessageType} from "$lib/types";
+import type {Message, Message_Offer, Message_Standard} from "$lib/types";
+import {selectedConversation} from "$lib/chat/conversations";
+import {MessageType} from "$lib/types";
+import {currentUser} from "$lib/chat/user";
 export let conversation:ConversationEntry;
-export let currentUser:User;
-export let selectedConversation:ConversationEntry | undefined;
 
-let isActive = selectedConversation !== undefined ? (conversation.conversationObj._id === selectedConversation.conversationObj._id;
+let isActive = $selectedConversation !== undefined && (conversation.conversationObj._id === $selectedConversation.conversationObj._id);
 
 function displayLastMessage(lastMessage:Message) {
     let type = lastMessage.messageType;
@@ -36,7 +37,7 @@ function displayLastMessage(lastMessage:Message) {
 }
 </script>
 
-<div on:click={() => {openConversationEntry(conversation,false)}} on:keydown={() => {openConversationEntry(conversation,false)}} role="button" tabindex="0" class="chat-item {isActive ? 'chat-item-active' : ''}">
+<div on:click={() => {selectedConversation.set(conversation)}} on:keydown={() => {selectedConversation.set(conversation)}} role="button" tabindex="0" class="chat-item {isActive ? 'chat-item-active' : ''}">
     <span class="chat-picture">
         {#if conversation.pictureURL !== ""}
             <img src="{conversation.pictureURL}" alt="profile-icon">
@@ -46,7 +47,7 @@ function displayLastMessage(lastMessage:Message) {
     </span>
     <div class="chat-details">
         <span class="chat-name">
-            {getOtherUsername(currentUser,conversation.conversationObj.usernames)}
+            {getOtherUsername($currentUser,conversation.conversationObj.usernames)}
         </span>
         <span class="chat-last">
             {displayLastMessage(conversation.lastMessage)}

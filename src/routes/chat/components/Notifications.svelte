@@ -1,25 +1,11 @@
 <script lang="ts">
-    let error = '';
-    async function showError(msg:string) {
-        error = msg;
-        const duration = 5*1000;
-        setTimeout(() => {
-            error = '';
-        }, duration);
-    }
-
-    let success = '';
-    async function showSuccess(msg:string) {
-        success = msg;
-        const duration = 5*1000;
-        setTimeout(() => {
-            success = '';
-        }, duration);
-    }
+    import {startNotificationListener} from "$lib/chat/notifications";
+    import {success, error} from "$lib/chat/notifications";
+    startNotificationListener();
 </script>
-{#if success !== ''}
+{#if $success !== false}
     <div class="success">{success}</div>
 {/if}
-{#if error !== ''}
+{#if $error !== false}
     <div class="error">{error}</div>
 {/if}

@@ -5,12 +5,10 @@
     import ChatArchived from "./ChatList/ChatArchived.svelte";
     import LoadingScreen from "./LoadingScreen.svelte";
     import ChatSearch from "./ChatList/ChatSearch.svelte";
-    import type {User} from "$lib/types";
-
-    export let currentUser:User;
+    import {chatOpen, loadingChatList} from "$lib/chat/states";
 
 </script>
-{#if chatOpen === true}
+{#if $chatOpen === true}
     <style>
         @media screen and (max-width: 720px) {
             .chat-list {
@@ -20,9 +18,9 @@
     </style>
 {/if}
 <div class="chat-list">
-    <LoadingScreen visible={loadingChatListPanel}></LoadingScreen>
-    <ChatTopbar currentUser={currentUser}></ChatTopbar>
+    <LoadingScreen visible={$loadingChatList}></LoadingScreen>
+    <ChatTopbar></ChatTopbar>
     <ChatSearch></ChatSearch>
-    <ChatWrapper currentUser={currentUser} conversations={conversations} selectedConversation={selectedConversation}></ChatWrapper>
+    <ChatWrapper></ChatWrapper>
     <ChatArchived></ChatArchived>
 </div>

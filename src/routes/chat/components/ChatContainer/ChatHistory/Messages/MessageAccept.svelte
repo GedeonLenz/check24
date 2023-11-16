@@ -1,9 +1,9 @@
 <script lang="ts">
     import type {Message_Accept, Message_Standard, User} from "$lib/types";
-    export let currentUser:User;
+    import {currentUser} from "$lib/chat/user";
     export let message:Message_Accept;
 
-    let mymessage = message.sender.username === currentUser.username;
+    let mymessage = $currentUser !== undefined && message.sender.username === $currentUser.username;
     let unread = !mymessage && message.read === false;
 </script>
 <div class="chat-message message-accept {unread ? 'message-unread' : ''} {mymessage ? 'message-me' : 'message-other'}">

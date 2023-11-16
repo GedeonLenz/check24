@@ -4,13 +4,10 @@ import ChatEditor from "./ChatContainer/ChatEditor.svelte";
 import LoadingScreen from "./LoadingScreen.svelte";
 import ChatHistory from "./ChatContainer/ChatHistory.svelte";
 import NoChat from "./ChatContainer/NoChat.svelte";
-import type {Message, ConversationEntry, User} from "$lib/types";
+import {chatOpen, loadingChatPanel} from "$lib/chat/states";
 
-export let currentUser:User;
-
-let JOB_updateMessages:any = undefined;
 </script>
-{#if chatOpen === true}
+{#if $chatOpen === true}
     <style>
         @media screen and (max-width: 720px) {
             .chat-container {
@@ -22,9 +19,9 @@ let JOB_updateMessages:any = undefined;
     </style>
 {/if}
 <div class="chat-container">
-    <LoadingScreen visible={loading}></LoadingScreen>
-    <NoChat visible={noChat}></NoChat>
-    <ChatProfile currentUser={currentUser} selectedConversation={selectedConversation} chatOpen={chatOpen}></ChatProfile>
-    <ChatHistory currentUser={currentUser} selectedConversation={selectedConversation} messages={messages}></ChatHistory>
-    <ChatEditor currentUser={currentUser} selectedConversation={selectedConversation}></ChatEditor>
+    <LoadingScreen visible={$loadingChatPanel}></LoadingScreen>
+    <NoChat></NoChat>
+    <ChatProfile></ChatProfile>
+    <ChatHistory></ChatHistory>
+    <ChatEditor></ChatEditor>
 </div>

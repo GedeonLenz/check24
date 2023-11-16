@@ -1,10 +1,10 @@
 <script lang="ts">
     import type {Message_File, User} from "$lib/types.js";
+    import {currentUser} from "$lib/chat/user";
 
     export let message:Message_File;
-    export let currentUser:User;
 
-    let mymessage = message.sender.username === currentUser.username;
+    let mymessage = $currentUser !== undefined && message.sender.username === $currentUser.username;
     let unread = !mymessage && message.read === false;
 </script>
 
