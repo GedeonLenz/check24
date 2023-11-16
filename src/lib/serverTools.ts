@@ -1,7 +1,7 @@
 import {collection_auth, collection_conversations, collection_messages} from "$db/collections";
 import {ObjectId} from "mongodb";
-import type {Conversation, User, UserObj, Message} from "../routes/api/types";
-import {ConversationState, UserRole} from "../routes/api/types";
+import type {Conversation, User, UserObj, Message} from "./types";
+import {ConversationState, UserRole} from "./types";
 import {getOtherUsername} from "$lib/clientTools";
 
 /**********************/

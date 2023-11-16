@@ -15,8 +15,8 @@ import type {
     ConversationListResponse,
     Message,
     User
-} from "../../types";
-import {UserRole} from "../../types";
+} from "$lib/types";
+import {UserRole} from "$lib/types";
 
 export async function GET(event:any) {
     let currentUser:User | null = await getUser(event.cookies);

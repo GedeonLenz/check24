@@ -1,5 +1,5 @@
 import {collection_conversations} from "$db/collections";
-import {type ConversationUpdateRequest, UserRole,} from "../../types";
+import {type ConversationUpdateRequest, UserRole,} from "$lib/types";
 import {
     getConversation,
     getCurrentDateTime,

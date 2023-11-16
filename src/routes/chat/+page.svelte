@@ -9,8 +9,8 @@
         Message_Offer,
         Message_Standard,
         User
-    } from "../api/types";
-    import {ConversationState, MessageType, UserRole} from "../api/types";
+    } from "$lib/types";
+    import {ConversationState, MessageType, UserRole} from "$lib/types";
     import {
         archiveConversation,
         dateDiff, dateStringToDate,

@@ -1,5 +1,5 @@
 import {collection_conversations, collection_messages} from "$db/collections";
-import type {ConversationUpdateRequest} from "../../types";
+import type {ConversationUpdateRequest} from "$lib/types";
 import {
     getCurrentDateTime, getResponse_InternalError, getResponse_Success,
     getResponse_Unauthorized, isUserConversationParticipant

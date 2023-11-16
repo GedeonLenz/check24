@@ -1,6 +1,6 @@
 import {collection_conversations} from "$db/collections";
 import {ObjectId} from "mongodb";
-import {type ConversationReviewRatingRequest, UserRole} from "../../../types";
+import {type ConversationReviewRatingRequest, UserRole} from "$lib/types";
 import {checkUserRole, getUser} from "$lib/auth";
 import {
     getResponse_BadRequest,

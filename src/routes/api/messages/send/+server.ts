@@ -16,8 +16,8 @@ import type {
     MessageRequest,
     NewMessageResponse,
     User
-} from "../../types";
-import {ConversationState, MessageType, UserRole} from "../../types";
+} from "$lib/types";
+import {ConversationState, MessageType, UserRole} from "$lib/types";
 import {
     getConversation,
     getCurrentDateTime,

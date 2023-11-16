@@ -5,8 +5,8 @@ import type {
     ConversationInsertRequest,
     ConversationInsertResponse,
     Message_Offer
-} from "../../types";
-import {ConversationState, isConversationRequest, type UserObj, UserRole} from "../../types";
+} from "$lib/types";
+import {ConversationState, isConversationRequest, type UserObj, UserRole} from "$lib/types";
 import {
     extractFindData,
     getCurrentDateTime, getPictureURL,

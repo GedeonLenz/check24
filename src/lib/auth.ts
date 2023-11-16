@@ -1,7 +1,7 @@
 import {redirect, type Cookies} from '@sveltejs/kit';
 import jwt from "jsonwebtoken";
 import {SECRET_JWT_KEY} from "$env/static/private";
-import type {User, UserRole} from "../routes/api/types";
+import type {User, UserRole} from "./types";
 
 export async function generateJWT(username:string,type:UserRole,pictureURL:string = "") {
     const payload = {

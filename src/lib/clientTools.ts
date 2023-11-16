@@ -4,8 +4,8 @@ import type {
     ConversationReviewRatingRequest,
     ConversationUpdateRequest, Message_AcceptRequest, Message_FileRequest,
     Message_OfferRequest, Message_RejectRequest, Message_StandardRequest, MessageRequest, User
-} from "../routes/api/types";
-import {MessageType, UserRole} from "../routes/api/types";
+} from "./types";
+import {MessageType, UserRole} from "./types";
 
 
 /**********************/
