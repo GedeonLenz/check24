@@ -1,5 +1,7 @@
+import {ObjectId} from "mongodb";
 import {collection_conversations} from "$db/collections";
 import {type ConversationUpdateRequest, UserRole,} from "$lib/types";
+import {getUser} from "$lib/auth";
 import {
     getConversation,
     getCurrentDateTime,
@@ -9,8 +11,6 @@ import {
     getResponse_Unauthorized,
     isUserConversationParticipant
 } from "$lib/tools/serverTools";
-import {getUser} from "$lib/auth";
-import {ObjectId} from "mongodb";
 
 export async function POST(event:any) {
     let currentUser = await getUser(event.cookies);

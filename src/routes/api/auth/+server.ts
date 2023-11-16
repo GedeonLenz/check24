@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import {collection_auth} from "$db/collections";
 import {extractFindData, getResponse_Success, getResponse_Unauthorized} from "$lib/tools/serverTools";
-import type {UserObj} from "$lib/types";
 import {generateJWT} from "$lib/auth";
+import type {UserObj} from "$lib/types";
 export async function POST(event:any) {
     const cookies = event.cookies;
 
