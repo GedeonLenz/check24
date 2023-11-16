@@ -1,5 +1,5 @@
 /*GET / Filter List of Conversations*/
-import {getUser} from "../../auth/auth";
+import {getUser} from "$lib/auth";
 import {
     extractFindData, getLastMessage, getPictureURL,
     getResponse_BadRequest,

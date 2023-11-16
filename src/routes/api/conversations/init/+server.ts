@@ -16,7 +16,7 @@ import {
     getResponse_Unauthorized,
 } from "$lib/serverTools";
 import {_sendInitMessage} from "../../messages/send/+server";
-import {checkUserRole, getUser} from "../../auth/auth";
+import {checkUserRole, getUser} from "$lib/auth";
 
 async function checkExisting(usernames:{ customer: string; serviceprovider: string; }) {
     const data = await collection_conversations.find({"usernames.customer":usernames.customer,"usernames.serviceprovider":usernames.serviceprovider},{limit:1, projection: {}}).toArray()

@@ -1,7 +1,7 @@
 import {collection_conversations} from "$db/collections";
 import {ObjectId} from "mongodb";
 import {type ConversationUpdateRequest, UserRole} from "../../../types";
-import {checkUserRole, getUser} from "../../../auth/auth";
+import {checkUserRole, getUser} from "$lib/auth";
 import {
     getResponse_BadRequest,
     getResponse_Success,

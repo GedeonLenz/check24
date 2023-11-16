@@ -1,6 +1,6 @@
 /*GET / Filter List of Conversations*/
 import {collection_messages} from "$db/collections";
-import {getUser} from "../../auth/auth";
+import {getUser} from "$lib/auth";
 import {
     extractFindData,
     getConversation,

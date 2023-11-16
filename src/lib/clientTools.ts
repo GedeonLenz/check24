@@ -1,7 +1,3 @@
-
-
-/*GET and POST*/
-
 import type {
     ConversationEntry,
     ConversationInsertRequest, ConversationListResponse,
@@ -11,6 +7,10 @@ import type {
 } from "../routes/api/types";
 import {MessageType, UserRole} from "../routes/api/types";
 
+
+/**********************/
+/*   BASE API CALLS   */
+/**********************/
 export async function sendPOST(url:string, data:object) {
     try {
         const response:Response = await fetch(url, {
@@ -39,7 +39,9 @@ export async function sendGET(url:string,params:StringParams) {
     }
 }
 
-/*Conversations*/
+/**********************/
+/*    Conversations   */
+/**********************/
 
 export async function initConversation(sender:User,receiverUsername:string, text:string, price:number) {
     if(sender.type != UserRole.ServiceProvider || receiverUsername == '' || text == '' || price < 0) return false;
@@ -126,7 +128,9 @@ export async function getConversations(user:User, receiverFilter:string = '',off
     return responseObj.data;
 }
 
-/*Messages*/
+/**********************/
+/*      Messages      */
+/**********************/
 
 async function sendMessage(message:MessageRequest) {
     return await sendPOST("/api/messages/send",message);
@@ -163,7 +167,6 @@ export async function sendRejectMessage(sender:User, conversationID:string, text
     }
     return await sendMessage(message);
 }
-
 
 export async function sendFileMessage(sender:User, conversationID:string, file:File,callback:Function) {
     if(conversationID == '') return false;
@@ -205,7 +208,24 @@ export async function getMessages(conversationID:string,offset:number = 0,amount
 }
 
 
-//Helpers
+/**********************/
+/*       Helpers      */
+/**********************/
+
+//Reviews
+export function getReviewRequested(currentConversation:ConversationEntry) {
+    let conv = currentConversation.conversationObj
+    return conv.review != undefined && conv.review.requested != undefined && conv.review?.requested == true;
+}
+export function getReview(currentConversation:ConversationEntry) {
+    let conv = currentConversation.conversationObj
+    if(conv.review != undefined && conv.review.reviewed != undefined && conv.review?.reviewed == true && conv.review.rating != undefined) {
+        return conv.review.rating;
+    }
+    return undefined;
+}
+
+//Users
 export function getOtherUsername(user:User,usernames:{customer:string,serviceprovider:string}) {
     if(user.type == UserRole.ServiceProvider) {
         return usernames.customer;
@@ -215,6 +235,7 @@ export function getOtherUsername(user:User,usernames:{customer:string,servicepro
     }
 }
 
+//Files
 export function getFileExtension(filePath:string) {
     return filePath.slice(((filePath.lastIndexOf(".") - 1) >>> 0) + 2);
 }
@@ -224,6 +245,7 @@ export function getFileName(filePath:string) {
     return pathParts[pathParts.length - 1];
 }
 
+//Dates
 export function getCurrentDateTime(): string {
     return new Date().toISOString();
 }
@@ -237,17 +259,4 @@ export function dateDiff(d1:string,d2:string) {
     let d2o:Date = dateStringToDate(d2);
     const diffTime:number = Math.abs(d1o.getTime() - d2o.getTime());
     return Math.floor(diffTime / (1000 * 60 * 60 * 24));
-}
-
-export function getReviewRequested(currentConversation:ConversationEntry) {
-    let conv = currentConversation.conversationObj
-    return conv.review != undefined && conv.review.requested != undefined && conv.review?.requested == true;
-}
-
-export function getReview(currentConversation:ConversationEntry) {
-    let conv = currentConversation.conversationObj
-    if(conv.review != undefined && conv.review.reviewed != undefined && conv.review?.reviewed == true && conv.review.rating != undefined) {
-        return conv.review.rating;
-    }
-    return undefined;
 }

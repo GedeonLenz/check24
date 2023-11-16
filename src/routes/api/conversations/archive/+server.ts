@@ -9,7 +9,7 @@ import {
     getResponse_Unauthorized,
     isUserConversationParticipant
 } from "$lib/serverTools";
-import {getUser} from "../../auth/auth";
+import {getUser} from "$lib/auth";
 import {ObjectId} from "mongodb";
 
 export async function POST(event:any) {

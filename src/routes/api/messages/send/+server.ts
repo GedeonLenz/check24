@@ -27,7 +27,7 @@ import {
     getResponse_Unauthorized,
     isUserConversationParticipant, setConversationState, updateConversation
 } from "$lib/serverTools";
-import {checkUserRole, getUser} from "../../auth/auth";
+import {checkUserRole, getUser} from "$lib/auth";
 import type {ObjectId} from "mongodb";
 
 /*Send Conversation Init MSG POST*/

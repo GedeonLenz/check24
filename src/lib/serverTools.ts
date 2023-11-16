@@ -4,17 +4,11 @@ import type {Conversation, User, UserObj, Message} from "../routes/api/types";
 import {ConversationState, UserRole} from "../routes/api/types";
 import {getOtherUsername} from "$lib/clientTools";
 
-export function getCurrentDateTime(): string {
-    return new Date().toISOString();
-}
+/**********************/
+/* Response Templates */
+/**********************/
 
-export function extractFindData<GenericType>(data: any[]):GenericType[] {
-    return data.map(item => ({
-        ...item,
-        _id: item._id.toString()
-    })) as unknown as GenericType[];
-}
-
+//BASIC
 export function getResponse_Success(data: any = {}) {
     let jsonBody = {
         success:true,
@@ -37,6 +31,7 @@ export function getResponse_ErrorCode(code:number) {
     });
 }
 
+//PREDEFINED CODES
 export function getResponse_BadRequest() {
     return getResponse_ErrorCode(400);
 }
@@ -49,6 +44,24 @@ export function getResponse_Unauthorized() {
     return getResponse_ErrorCode(401);
 }
 
+/**********************/
+/*       Helpers      */
+/**********************/
+
+//Dates
+export function getCurrentDateTime(): string {
+    return new Date().toISOString();
+}
+
+//Database
+export function extractFindData<GenericType>(data: any[]):GenericType[] {
+    return data.map(item => ({
+        ...item,
+        _id: item._id.toString()
+    })) as unknown as GenericType[];
+}
+
+//Users
 export async function isUserConversationParticipant(user:User,conversationID:string) {
     let conversation = await getConversation(conversationID);
     if(conversation != null) {
@@ -61,33 +74,6 @@ export async function isUserConversationParticipant(user:User,conversationID:str
     }
     return false
 }
-export async function getConversation(id:string) {
-    const data = await collection_conversations.find({_id:new ObjectId(id)},{limit:1, projection: {}}).toArray()
-    let conversations:Conversation[] = extractFindData<Conversation>(data);
-    if (conversations.length >= 1) {
-        return conversations[0];
-    }
-    else{
-        return null;
-    }
-}
-
-export async function getLastMessage(conversation:Conversation) {
-    const data = await collection_messages.find({conversationID:conversation._id},{limit:1, projection: {}}).sort({"dates.created": -1}).toArray()
-    let msgs:Message[] = extractFindData<Message>(data);
-
-    if (msgs.length >= 1) {
-        return msgs[0];
-    }
-    else{
-        return null;
-    }
-}
-
-export async function getUnreadCount(conversation:Conversation,currentUser:User) {
-    return await collection_messages.countDocuments({conversationID:conversation._id, read: false, 'sender.username': { '$ne': currentUser.username } },{});
-}
-
 export async function getPictureURL(conversation:Conversation,currentUser:User) {
     const data = await collection_auth.find({username:getOtherUsername(currentUser,conversation.usernames)},{limit:1, projection: {}}).toArray()
     let users:UserObj[] = extractFindData<UserObj>(data);
@@ -100,6 +86,7 @@ export async function getPictureURL(conversation:Conversation,currentUser:User) 
     }
 }
 
+//Conversations
 export async function setConversationState(id:string,state:ConversationState) {
     let data;
     if(state == ConversationState.Accepted) {
@@ -130,4 +117,31 @@ export async function updateConversation(conversation:Conversation) {
             }
         });
     return res1.acknowledged;
+}
+
+export async function getConversation(id:string) {
+    const data = await collection_conversations.find({_id:new ObjectId(id)},{limit:1, projection: {}}).toArray()
+    let conversations:Conversation[] = extractFindData<Conversation>(data);
+    if (conversations.length >= 1) {
+        return conversations[0];
+    }
+    else{
+        return null;
+    }
+}
+
+export async function getLastMessage(conversation:Conversation) {
+    const data = await collection_messages.find({conversationID:conversation._id},{limit:1, projection: {}}).sort({"dates.created": -1}).toArray()
+    let msgs:Message[] = extractFindData<Message>(data);
+
+    if (msgs.length >= 1) {
+        return msgs[0];
+    }
+    else{
+        return null;
+    }
+}
+
+export async function getUnreadCount(conversation:Conversation,currentUser:User) {
+    return await collection_messages.countDocuments({conversationID:conversation._id, read: false, 'sender.username': { '$ne': currentUser.username } },{});
 }

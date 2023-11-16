@@ -1,8 +1,7 @@
 import {redirect, type Cookies} from '@sveltejs/kit';
 import jwt from "jsonwebtoken";
 import {SECRET_JWT_KEY} from "$env/static/private";
-import type {User} from "../types";
-import type {UserRole} from "../types";
+import type {User, UserRole} from "../routes/api/types";
 
 export async function generateJWT(username:string,type:UserRole,pictureURL:string = "") {
     const payload = {
@@ -13,7 +12,7 @@ export async function generateJWT(username:string,type:UserRole,pictureURL:strin
     return jwt.sign(payload, SECRET_JWT_KEY, {});
 }
 export async function verifyJWT(token: string) {
-    const isValid = await jwt.verify(token, SECRET_JWT_KEY)
+    const isValid = jwt.verify(token, SECRET_JWT_KEY)
     if (isValid) {
         let jwtdecode:{username:string,type:UserRole,pictureURL:string, iat:number} = jwt.decode(token) as {username:string,type:UserRole,pictureURL:string, iat:number};
         let user:User = {username:jwtdecode.username,type:jwtdecode.type,pictureURL:jwtdecode.pictureURL}
