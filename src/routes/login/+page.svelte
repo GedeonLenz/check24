@@ -3,6 +3,7 @@
 </svelte:head>
 <script lang="ts">
     import { goto } from "$app/navigation";
+
     let username = "";
     let password = "";
     async function authenticate() {
@@ -20,7 +21,6 @@
     async function login() {
         const res = await authenticate();
         if(res) {
-            //Redirect after login
             await goto('/chat')
         }
         else{

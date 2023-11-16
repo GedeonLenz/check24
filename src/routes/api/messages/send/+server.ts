@@ -215,7 +215,7 @@ async function handleRejectMessage(requestMessage:Message_RejectRequest, current
     else return getResponse_InternalError();
 }
 
-export async function handleStandardMessage(requestMessage:Message_StandardRequest,currentConversation:Conversation){
+async function handleStandardMessage(requestMessage:Message_StandardRequest,currentConversation:Conversation){
     let message = requestMessage;
 
     let messageToInsert:Message_StandardInsert = {
