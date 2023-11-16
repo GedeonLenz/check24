@@ -26,10 +26,10 @@
         sendFileMessage,
         sendRejectMessage,
         sendTextMessage
-    } from "$lib/clientTools";
+    } from "$lib/tools/clientTools";
     import {onMount} from "svelte";
     import '@fortawesome/fontawesome-free/css/all.min.css'
-    import {getCurrentDateTime} from "$lib/clientTools";
+    import {getCurrentDateTime} from "$lib/tools/clientTools";
 
     export let data;
 

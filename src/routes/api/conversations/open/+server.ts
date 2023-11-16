@@ -3,7 +3,7 @@ import type {ConversationUpdateRequest} from "$lib/types";
 import {
     getCurrentDateTime, getResponse_InternalError, getResponse_Success,
     getResponse_Unauthorized, isUserConversationParticipant
-} from "$lib/serverTools";
+} from "$lib/tools/serverTools";
 import {getUser} from "$lib/auth";
 import {ObjectId} from "mongodb";
 

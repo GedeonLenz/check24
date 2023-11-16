@@ -14,7 +14,7 @@ import {
     getResponse_InternalError,
     getResponse_Success,
     getResponse_Unauthorized,
-} from "$lib/serverTools";
+} from "$lib/tools/serverTools";
 import {_sendInitMessage} from "../../messages/send/+server";
 import {checkUserRole, getUser} from "$lib/auth";
 
