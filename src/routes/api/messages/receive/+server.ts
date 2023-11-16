@@ -8,7 +8,7 @@ import {
     getResponse_Success,
     getResponse_Unauthorized,
     isUserConversationParticipant
-} from "../../tools";
+} from "$lib/serverTools";
 import type {ChatMessagesRequest, ChatMessagesResponse, Conversation, Message, TextMessage} from "../../types";
 import {ConversationState, MessageType} from "../../types";
 

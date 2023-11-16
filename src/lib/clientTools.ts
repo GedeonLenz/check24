@@ -1,22 +1,17 @@
-import type {
-    ConversationEntry,
-    ConversationInsertRequest,
-    ConversationListResponse,
-    ConversationReviewRatingRequest,
-    ConversationUpdateRequest,
-    Message_AcceptRequest,
-    Message_FileRequest,
-    Message_OfferRequest,
-    Message_RejectRequest,
-    Message_StandardRequest,
-    MessageRequest,
-    User
-} from "./api/types";
-import {MessageType, UserRole} from "./api/types";
+
 
 /*GET and POST*/
 
-export async function sendPOST(url:string,data:object) {
+import type {
+    ConversationEntry,
+    ConversationInsertRequest, ConversationListResponse,
+    ConversationReviewRatingRequest,
+    ConversationUpdateRequest, Message_AcceptRequest, Message_FileRequest,
+    Message_OfferRequest, Message_RejectRequest, Message_StandardRequest, MessageRequest, User
+} from "../routes/api/types";
+import {MessageType, UserRole} from "../routes/api/types";
+
+export async function sendPOST(url:string, data:object) {
     try {
         const response:Response = await fetch(url, {
             method: 'POST',

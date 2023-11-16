@@ -6,7 +6,7 @@ import {
     getResponse_InternalError,
     getResponse_Success,
     getResponse_Unauthorized, getUnreadCount
-} from "../../tools";
+} from "$lib/serverTools";
 import {collection_conversations, collection_messages} from "$db/collections";
 import type {
     Conversation,

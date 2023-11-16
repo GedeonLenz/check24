@@ -1,8 +1,8 @@
-import type {Conversation, User, UserObj} from "./types";
 import {collection_auth, collection_conversations, collection_messages} from "$db/collections";
-import {ConversationState, type Message, UserRole} from "./types";
 import {ObjectId} from "mongodb";
-import {getOtherUsername} from "../clientTools";
+import type {Conversation, User, UserObj, Message} from "../routes/api/types";
+import {ConversationState, UserRole} from "../routes/api/types";
+import {getOtherUsername} from "$lib/clientTools";
 
 export function getCurrentDateTime(): string {
     return new Date().toISOString();
