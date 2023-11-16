@@ -16,11 +16,10 @@ export async function POST(event:any) {
     const body = await event.request.json();
     let request:ConversationUpdateRequest = body.data;
 
-    if(!(await isUserConversationParticipant(currentUser,request.conversationID))) {
-        return getResponse_Unauthorized();
-    }
-
-    if(!checkUserRole(currentUser,UserRole.ServiceProvider)) {
+    if(
+        (!(await isUserConversationParticipant(currentUser,request.conversationID))) ||
+        (!checkUserRole(currentUser,UserRole.ServiceProvider))
+    ) {
         return getResponse_Unauthorized();
     }
 

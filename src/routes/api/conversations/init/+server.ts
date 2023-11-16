@@ -1,14 +1,8 @@
 import {collection_auth, collection_conversations} from "$db/collections";
-import type {
-    Conversation, ConversationEntry,
-    ConversationInsert,
-    ConversationInsertRequest,
-    ConversationInsertResponse,
-    Message_Offer
-} from "$lib/types";
+import {checkUserRole, getUser, userExists} from "$lib/auth";
 import {ConversationState, isConversationRequest, type UserObj, UserRole} from "$lib/types";
 import {
-    extractFindData,
+    checkExistingConversation,
     getCurrentDateTime, getPictureURL,
     getResponse_BadRequest,
     getResponse_InternalError,
@@ -16,23 +10,13 @@ import {
     getResponse_Unauthorized,
 } from "$lib/tools/serverTools";
 import {_sendInitMessage} from "../../messages/send/+server";
-import {checkUserRole, getUser} from "$lib/auth";
-
-async function checkExisting(usernames:{ customer: string; serviceprovider: string; }) {
-    const data = await collection_conversations.find({"usernames.customer":usernames.customer,"usernames.serviceprovider":usernames.serviceprovider},{limit:1, projection: {}}).toArray()
-    let conversations:Conversation[] = extractFindData<Conversation>(data);
-    return conversations.length >= 1;
-}
-async function userExists(username:String,role:UserRole) {
-    const data = await collection_auth.find({username:username},{limit:1, projection: {}}).toArray()
-    let userObjs = extractFindData<UserObj>(data);
-    if (userObjs.length >= 1) {
-        if(userObjs[0].type == role) {
-            return true;
-        }
-    }
-    return false;
-}
+import type {
+    Conversation, ConversationEntry,
+    ConversationInsert,
+    ConversationInsertRequest,
+    ConversationInsertResponse,
+    Message_Offer
+} from "$lib/types";
 /*Init Conversation POST*/
 export async function POST(event:any) {
     //Check Login validity / permissions
@@ -45,16 +29,11 @@ export async function POST(event:any) {
     if(isConversationRequest(data)) {
         let request:ConversationInsertRequest = data;
 
-        //Validate currentUser is part of conversation
-        if(currentUser.username != request.usernames.serviceprovider) {
-            return getResponse_BadRequest();
-        }
-
-        if(!await userExists(request.usernames.customer,UserRole.Customer)) {
-            return getResponse_BadRequest();
-        }
-
-        if(await checkExisting(request.usernames)) {
+        if(
+            (currentUser.username != request.usernames.serviceprovider) ||
+            (!await userExists(request.usernames.customer,UserRole.Customer)) ||
+            (await checkExistingConversation(request.usernames))
+        ) {
             return getResponse_BadRequest();
         }
 
@@ -79,7 +58,7 @@ export async function POST(event:any) {
                 _id: conversationID,
                 ...new_conversation
             };
-            //Insert starting message
+
             let sent: Message_Offer | null = await _sendInitMessage(currentUser,request.initMessage,conversation)
             if(sent != null) {
                 conversation.state = ConversationState.Quoted;

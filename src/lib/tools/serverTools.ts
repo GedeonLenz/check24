@@ -1,8 +1,16 @@
 import {collection_auth, collection_conversations, collection_messages} from "$db/collections";
 import {ObjectId} from "mongodb";
-import type {Conversation, User, UserObj, Message} from "../types";
-import {ConversationState, UserRole} from "../types";
+import type {Conversation, User, UserObj, Message, TextMessage} from "../types";
+import {ConversationState, MessageType, UserRole} from "../types";
 import {getOtherUsername} from "$lib/tools/clientTools";
+import AWS from "aws-sdk";
+import {
+    SECRET_STORAGE_S3_ACCESSKEY, SECRET_STORAGE_S3_BUCKET_NAME,
+    SECRET_STORAGE_S3_ENDPOINT,
+    SECRET_STORAGE_S3_REGION,
+    SECRET_STORAGE_S3_SECRETKEY
+} from "$env/static/private";
+import crypto from "crypto";
 
 /**********************/
 /* Response Templates */
@@ -119,6 +127,12 @@ export async function updateConversation(conversation:Conversation) {
     return res1.acknowledged;
 }
 
+export async function checkExistingConversation(usernames:{ customer: string; serviceprovider: string; }) {
+    const data = await collection_conversations.find({"usernames.customer":usernames.customer,"usernames.serviceprovider":usernames.serviceprovider},{limit:1, projection: {}}).toArray()
+    let conversations:Conversation[] = extractFindData<Conversation>(data);
+    return conversations.length >= 1;
+}
+
 export async function getConversation(id:string) {
     const data = await collection_conversations.find({_id:new ObjectId(id)},{limit:1, projection: {}}).toArray()
     let conversations:Conversation[] = extractFindData<Conversation>(data);
@@ -144,4 +158,102 @@ export async function getLastMessage(conversation:Conversation) {
 
 export async function getUnreadCount(conversation:Conversation,currentUser:User) {
     return await collection_messages.countDocuments({conversationID:conversation._id, read: false, 'sender.username': { '$ne': currentUser.username } },{});
+}
+
+//Messages
+export function maskMessages(conversation:Conversation ,msgs:Message[]) {
+    if(conversation.state == ConversationState.Quoted || conversation.state == ConversationState.Chatting) {
+        return msgs.map((msg:Message):Message => {
+            if(msg.messageType == MessageType.File) return msg;
+            else {
+                let textMsg:TextMessage = msg as TextMessage;
+                textMsg.text = filterContactData(textMsg.text);
+                return textMsg;
+            }
+        })
+    }
+    else return msgs;
+}
+
+export function filterContactData(text:string) {
+    text = maskEmail(text);
+    text = maskURLs(text);
+    text = maskPhone(text);
+    return text;
+}
+
+export function maskURLs(input:string) {
+    const domainRegex: RegExp = /(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}/g;
+    input = input.replace(domainRegex, (m:string) => '*'.repeat(m.length));
+    return input
+}
+
+export function maskPhone(input:string) {
+    const phoneRegex: RegExp = /(\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*)/g;
+    input = input.replace(phoneRegex, (match:string) => match.replace(/\d/g, '*'));
+    return input
+}
+
+export function maskEmail(input:string) {
+    const emailRegex: RegExp = /(?<=\w*)[\w\-._+%]*(?=\w*@)/g;
+    input = input.replace(emailRegex, (m: string) => '*'.repeat(m.length));
+    return input
+}
+
+//Files
+export function getExtension(filename:string) {
+    var parts = filename.split('.');
+    return parts[parts.length - 1];
+}
+
+export function checkFileAllowed(filename:string) {
+    let ext = getExtension(filename);
+    let allowed = ['jpg','jpeg','gif','bmp','webp','png','wav','mp3','mp4','mov','pdf','txt'];
+    return allowed.includes(ext.toLowerCase());
+}
+
+export function checkFileSize(file:File,maxGB:number) {
+    return file.size <= maxGB*1024*1024*1024;
+}
+
+export function getS3Connection() {
+    return new AWS.S3({
+        accessKeyId: SECRET_STORAGE_S3_ACCESSKEY,
+        secretAccessKey: SECRET_STORAGE_S3_SECRETKEY,
+        region: SECRET_STORAGE_S3_REGION,
+        endpoint: SECRET_STORAGE_S3_ENDPOINT
+    });
+}
+
+export function createS3Directory(s3:AWS.S3, directoryName:string) {
+    const params2 = {
+        Bucket: SECRET_STORAGE_S3_BUCKET_NAME,
+        Key: directoryName,
+        Body: '',
+    };
+    return s3.putObject(params2);
+}
+
+export async function s3Upload(s3:AWS.S3, file:File, uploadLocation:string) {
+    const params = {
+        Bucket: SECRET_STORAGE_S3_BUCKET_NAME,
+        Key: uploadLocation,
+        Body: Buffer.from(await file.arrayBuffer()),
+    };
+
+    try {
+        return await s3.upload(params).promise();
+    } catch (error) {
+        return false;
+    }
+}
+
+//Random
+export function getRandomUUID(iterations:number = 4) {
+    if(iterations < 1) iterations = 1
+    let randomString:string = crypto.randomUUID();
+    for(let i = 0; i < iterations-1; i++) {
+        randomString += "-"+crypto.randomUUID();
+    }
+    return randomString
 }

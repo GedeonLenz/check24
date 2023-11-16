@@ -16,11 +16,10 @@ export async function POST(event:any) {
     const body = await event.request.json();
     let request:ConversationReviewRatingRequest = body.data;
 
-    if(!(await isUserConversationParticipant(currentUser,request.conversationID))) {
-        return getResponse_Unauthorized();
-    }
-
-    if(!checkUserRole(currentUser,UserRole.Customer)) {
+    if(
+        (!(await isUserConversationParticipant(currentUser,request.conversationID))) ||
+        (!checkUserRole(currentUser,UserRole.Customer))
+    ) {
         return getResponse_Unauthorized();
     }
 
