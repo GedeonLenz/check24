@@ -1,16 +1,32 @@
 import {error, resetError, resetSuccess} from "$lib/chat/notifications";
-import {archiveMode, searchQuery} from "$lib/chat/states";
-import {conversations, viewConversations, visibleConversations} from "$lib/chat/conversations";
-import {getOtherUsername} from "$lib/tools/clientTools";
+import {archiveMode, chatOpen, loadingChatPanel, noChat, searchQuery} from "$lib/chat/states";
+import {conversations, selectedConversation, viewConversations, visibleConversations} from "$lib/chat/conversations";
+import {getOtherUsername, openConversation} from "$lib/tools/clientTools";
 import {currentUser} from "$lib/chat/user";
 import {get} from "svelte/store";
 import {UserRole} from "$lib/types";
+import {fetchCurrentMessages, fetchMessages} from "$lib/chat/messages";
 
 export async function startAllListeners() {
     startNotificationListener();
     startListenerSearchQuery();
     startListenerViewConversations();
     startListenerArchiveMode();
+    startListenerSelectedConversation();
+}
+async function startListenerSelectedConversation() {
+    selectedConversation.subscribe(async (selectedConversation) => {
+        if(selectedConversation === undefined) return;
+        noChat.set(false);
+        chatOpen.set(true)
+
+        await fetchCurrentMessages();
+        //Set conversation as opened
+        let res = await openConversation(selectedConversation.conversationObj._id);
+        if(res == false || res.status != 200) {
+            error.set('An Error occurred while trying to update your chat status');
+        }
+    });
 }
 async function startNotificationListener() {
     error.subscribe((error) => {

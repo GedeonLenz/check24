@@ -8,6 +8,7 @@
     import {messages} from "$lib/chat/messages";
 </script>
 <style>
+    @import "ChatHistory/Messages/messages.css";
     .chat-history {
         display: block;
         position: relative;
@@ -26,8 +27,6 @@
         padding: 15px;
         padding-top: 0;
     }
-
-
     .unread-banner {
         display: block;
         position: relative;

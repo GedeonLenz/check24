@@ -103,8 +103,8 @@ export async function reviewConversation(conversationID:string, rating:number) {
     return response;
 }
 
-export async function getConversations(user:User, receiverFilter:string = '',offset:number = 0, amount:number = 0):Promise<ConversationListResponse> {
-    if(user == null) return {conversations:[],lastOpened:undefined};
+export async function getConversations(user:User | undefined, receiverFilter:string = '',offset:number = 0, amount:number = 0):Promise<ConversationListResponse> {
+    if(user == undefined) return {conversations:[],lastOpened:undefined};
     let filter;
     if(receiverFilter == '') filter = {}
     else{

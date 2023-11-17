@@ -1,20 +1,34 @@
 import {get, writable, type Writable} from "svelte/store";
 import type {ConversationEntry, Message} from "$lib/types";
 import {selectedConversation} from "$lib/chat/conversations";
-import {sendAcceptMessage, sendFileMessage, sendRejectMessage, sendTextMessage} from "$lib/tools/clientTools";
+import {
+    getMessages,
+    sendAcceptMessage,
+    sendFileMessage,
+    sendRejectMessage,
+    sendTextMessage
+} from "$lib/tools/clientTools";
 import {currentUser} from "$lib/chat/user";
 import {error} from "$lib/chat/notifications";
 import {ConversationState, UserRole} from "$lib/types";
-import {sendProgress} from "$lib/chat/states";
+import {loadingChatPanel, sendProgress} from "$lib/chat/states";
 
 export const messages:Writable<Message[]>  = writable([]);
 
-export function fetchCurrentMessages() {
-    fetchMessages(get(selectedConversation));
+export async function fetchCurrentMessages(invisible:boolean = false) {
+    await fetchMessages(get(selectedConversation),invisible);
 }
-export function fetchMessages(conversation:ConversationEntry | undefined) {
+export async function fetchMessages(conversation:ConversationEntry | undefined,invisible:boolean = false) {
     if(conversation === undefined) return false;
-
+    if(!invisible) loadingChatPanel.set(true);
+    let res = await getMessages(conversation.conversationObj._id);
+    if(res === false || res.status !== 200) {
+        error.set('Failed to load conversation!');
+    }
+    else{
+        messages.set((await res.json()).data.messages);
+    }
+    loadingChatPanel.set(false);
 }
 
 

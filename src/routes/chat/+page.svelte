@@ -9,12 +9,20 @@
     import Notifications from "./components/Notifications.svelte";
     import {currentUser} from "$lib/chat/user";
     import {startAllListeners} from "$lib/chat/listener";
-    import {fetchConversations} from "$lib/chat/conversations";
+    import {fetchConversations, initSelectedConversation} from "$lib/chat/conversations";
+    import {onMount} from "svelte";
     export let data;
     currentUser.set(data.currentUser);
 
-    startAllListeners();
-    fetchConversations();
+    async function init() {
+        await startAllListeners();
+        await fetchConversations();
+        await initSelectedConversation();
+    }
+
+    onMount(async () => {
+        await init();
+    });
 </script>
 <style>
     @import './style.css';
