@@ -45,6 +45,43 @@
     }
 
 </script>
+<style>
+    .star-wrapper {
+        display: flex;
+        position: relative;
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        row-gap: 10px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+
+    .review-desc {
+        display: block;
+        position: relative;
+        width: 100%;
+        height: auto;
+        color: #6b6b6b;
+        font-size: 12px;
+        font-weight: 400;
+        text-align: center;
+    }
+    .star-wrapper .star, .star-wrapper .star-filled  {
+        color: var(--button-color);
+        font-size: 20px;
+    }
+    .star-click {
+        cursor: pointer !important;
+        border-radius: 100px;
+    }
+    .star-click:hover {
+        color: #093fa9;
+    }
+</style>
 {#if review !== undefined}
     {#if isServiceProvider}
         <span class="review-desc">Customer {otherUser} rated your service with:</span>

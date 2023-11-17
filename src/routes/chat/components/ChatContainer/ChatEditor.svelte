@@ -7,7 +7,117 @@
     let fileValue: FileList | null = null;
     let messageField = "";
 </script>
+<style>
+    .chat-editor {
+        display: block;
+        position: absolute;
+        width: 100%;
+        left: 0;
+        bottom: 0;
+        height: 50px;
+        border-top: 1px solid rgba(0,0,0,0.1);
+    }
 
+    .chat-editor .icon-wrapper {
+        display: inline-block;
+        position: relative;
+        width: 30px;
+        height: 30px;
+        vertical-align: top;
+        left: 20px;
+        border-radius: 100px;
+        background: #e7e7e7;
+        cursor: pointer;
+        margin-left: 5px;
+        margin-right: 30px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+
+    .chat-editor .icon-wrapper i{
+        display: block;
+        position: absolute;
+        width: 9px;
+        height: 13px;
+        font-size: 13px;
+        left:50%;
+        top:50%;
+        transform: translate(-50%,-50%);
+        color: #252525;
+        cursor: pointer;
+    }
+
+    .chat-editor .icon-wrapper input {
+        display: block;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border: none;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    ::-webkit-file-upload-button {
+        cursor: pointer;
+    }
+
+    ::file-selector-button {
+        cursor: pointer;
+    }
+
+    .chat-editor .send-message-input {
+        margin-top: 8px;
+        display: inline-block;
+        width: calc(100% - 20px - 20px - 30px - 50px - 50px);
+        height: 30px;
+        border-radius: 100px;
+        border: 1px solid var(--border-color);
+        padding-left: 15px;
+        padding-right: 15px;
+        color: var(--base-color);
+    }
+
+    .chat-editor .send-message-input:focus {
+        outline: none;
+    }
+
+    .chat-editor .icon-wrapper-send {
+        display: inline-block;
+        position: relative;
+        width: 30px;
+        height: 30px;
+        vertical-align: top;
+        border-radius: 100px;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        background: var(--button-color);
+        margin-left: 8px;
+    }
+
+    .chat-editor .icon-wrapper-send svg {
+        display: block;
+        position: absolute;
+        width: 13px;
+        height: 13px;
+        left:50%;
+        top:50%;
+        transform: translate(-50%,-50%);
+    }
+
+    .chat-editor .sendprogress {
+        display: block;
+        position: absolute;
+        width: 0;
+        height: 3px;
+        background: var(--button-color);
+        margin-top: -3px;
+        transition: 0.3s;
+        border-bottom-right-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+</style>
 <div class="chat-editor">
     <div id="sendprogress" class="sendprogress" style="width: {sendProgress}%"></div>
     {#if

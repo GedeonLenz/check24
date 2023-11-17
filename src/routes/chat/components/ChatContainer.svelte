@@ -7,6 +7,23 @@ import NoChat from "./ChatContainer/NoChat.svelte";
 import {chatOpen, loadingChatPanel} from "$lib/chat/states";
 import {fetchCurrentMessages} from "$lib/chat/messages";
 </script>
+<style>
+    .chat-container {
+        display: inline-block;
+        position: absolute;
+        left: var(--chat-list-width);
+        width: calc(100% - var(--chat-list-width));
+        height: 100%;
+        overflow: visible;
+        transition: 0.3s;
+    }
+
+    @media screen and (max-width: 720px) {
+        .chat-container {
+            display: none;
+        }
+    }
+</style>
 {#if $chatOpen === true}
     <style>
         @media screen and (max-width: 720px) {

@@ -7,7 +7,60 @@
     import MessageQuote from "../ChatContainer/ChatHistory/Messages/MessageQuote.svelte";
     import {messages} from "$lib/chat/messages";
 </script>
+<style>
+    .chat-history {
+        display: block;
+        position: relative;
+        height: calc(100% - 112px);
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
 
+    .chat-history-content {
+        display: block;
+        position: relative;
+        height: auto;
+        max-height: calc(100% - 15px);
+        overflow-x: visible;
+        overflow-y: auto;
+        padding: 15px;
+        padding-top: 0;
+    }
+
+
+    .unread-banner {
+        display: block;
+        position: relative;
+        width: calc(100% + 28px);
+        height: 35px;
+        margin-bottom: 20px;
+        text-align: center;
+        background: #f5f5f5;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        box-sizing: border-box;
+        margin-left: -14px;
+        margin-right: -14px;
+    }
+
+    #top-placeholder {
+        display: block;
+        position: relative;
+        height: 35px;
+        margin-bottom: 20px;
+        background: transparent;
+    }
+
+    .unread-banner span {
+        display: block;
+        position: relative;
+        line-height: 15px;
+        color: #939393;
+        font-family: "Helvetica Neue","Arial",sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+    }
+</style>
 <div class="chat-history">
     <div class="chat-history-content" id="chat-history-content" >
         <div id="top-placeholder"></div>
