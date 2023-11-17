@@ -1,84 +1,11 @@
 <script lang="ts">
-    import {type ConversationEntry, MessageType, type User} from "$lib/types.js";
+    import {MessageType, type User} from "$lib/types.js";
     import MessageAccept from "../ChatContainer/ChatHistory/Messages/MessageAccept.svelte";
-    import LoadingScreen from "../LoadingScreen.svelte";
     import MessageStandard from "../ChatContainer/ChatHistory/Messages/MessageStandard.svelte";
     import MessageFile from "../ChatContainer/ChatHistory/Messages/MessageFile.svelte";
     import MessageReject from "../ChatContainer/ChatHistory/Messages/MessageReject.svelte";
     import MessageQuote from "../ChatContainer/ChatHistory/Messages/MessageQuote.svelte";
-    import type {Message} from "$lib/types.js";
-    import {getMessages} from "$lib/tools/clientTools";
-    import {selectedConversation} from "$lib/chat/conversations";
     import {messages} from "$lib/chat/messages";
-    import {error} from "$lib/chat/notifications";
-
-    async function loadMessages(){
-        if($selectedConversation != undefined) {
-            let before=$messages.length;
-            let res = await getMessages($selectedConversation.conversationObj._id);
-            if(res == false || res.status != 200) {
-                error.set('Failed to load conversation!');
-            }
-            else{
-                messages.set((await res.json()).data.messages);
-                if ($messages.length > before) {
-                    scrollBottom();
-                }
-            }
-        }
-    }
-
-    function scrollChat() {
-        const chatHistoryContent = document.getElementById('chat-history-content');
-        const unreadBanner = document.getElementById('unread-banner');
-        if(chatHistoryContent){
-            if (unreadBanner) {
-                unreadBanner.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
-                scrollBottom(false);
-            }
-        }
-    }
-
-    function scrollBottom(smooth=true) {
-        let container = document.getElementById('chat-history-content');
-        if(container) {
-            container.scrollTo({
-                top: container.scrollHeight,
-                behavior: smooth? 'smooth' : 'instant'
-            });
-        }
-    }
-
-    function insertUnreadBanner() {
-        const container = document.getElementById('chat-history-content');
-        if(container == null) return;
-        const prevBanner = container.querySelector('.unread-banner');
-        if(prevBanner){
-
-            if(prevBanner.classList.contains('first-message')) {
-                const tempContainer = document.createElement('div');
-                tempContainer.innerHTML = '<div id="top-placeholder"></div>'
-                container.insertBefore(tempContainer.firstChild as ChildNode, prevBanner);
-            }
-            prevBanner.remove();
-        }
-        const firstUnreadElement = container.querySelector('.message-unread');
-        if (firstUnreadElement) {
-            const groupElements = document.querySelectorAll('.chat-message');
-            const isFirstMessage = Array.from(groupElements).indexOf(firstUnreadElement as Element) === 0;
-
-            const tempContainer = document.createElement('div');
-            tempContainer.innerHTML = '<div class="chat-message unread-banner" id="unread-banner"><span>Unread messages</span></div>'
-            if(isFirstMessage) tempContainer.innerHTML = '<div class="chat-message unread-banner first-message"><span>Unread messages</span></div>'
-            container.insertBefore(tempContainer.firstChild as ChildNode, firstUnreadElement);
-
-            if (isFirstMessage) {
-                let placeholder = document.getElementById('top-placeholder')
-                if(placeholder) placeholder.remove();
-            }
-        }
-    }
 </script>
 
 <div class="chat-history">

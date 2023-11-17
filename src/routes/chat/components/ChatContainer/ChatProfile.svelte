@@ -1,24 +1,10 @@
 <script lang="ts">
-    import {archiveConversation, getOtherUsername} from "$lib/tools/clientTools.js";
-    import {type User, UserRole} from "$lib/types.js";
+    import {getOtherUsername} from "$lib/tools/clientTools.js";
+    import {UserRole} from "$lib/types.js";
     import {selectedConversation} from "$lib/chat/conversations";
-    import {error,success} from "$lib/chat/notifications";
     import {currentUser} from "$lib/chat/user";
     import {chatOpen} from "$lib/chat/states";
-
-    async function archiveChat() {
-        if($selectedConversation) {
-            let res = await archiveConversation($selectedConversation?.conversationObj._id);
-            if(res == false || res.status != 200) {
-                error.set('An Error occurred while trying to archive your chat. Please try again later.');
-            }
-            else{
-                success.set('Chat archived');
-                selectedConversation.set(undefined)
-                await renderConversationList(true);
-            }
-        }
-    }
+    import {archiveChat} from "$lib/chat/conversations";
 </script>
 
 <div class="chat-profile">

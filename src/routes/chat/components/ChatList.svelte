@@ -1,12 +1,11 @@
 <script lang="ts">
-
     import ChatTopbar from "./ChatList/ChatTopbar.svelte";
     import ChatWrapper from "./ChatList/ChatWrapper.svelte";
     import ChatArchived from "./ChatList/ChatArchived.svelte";
     import LoadingScreen from "./LoadingScreen.svelte";
     import ChatSearch from "./ChatList/ChatSearch.svelte";
     import {chatOpen, loadingChatList} from "$lib/chat/states";
-
+    import {fetchConversations} from "$lib/chat/conversations";
 </script>
 {#if $chatOpen === true}
     <style>

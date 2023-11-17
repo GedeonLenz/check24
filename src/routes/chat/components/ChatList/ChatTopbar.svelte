@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {type User, UserRole} from "$lib/types.js";
+    import {UserRole} from "$lib/types.js";
     import {newChatVisible} from "$lib/chat/states";
     import {currentUser} from "$lib/chat/user";
 </script>

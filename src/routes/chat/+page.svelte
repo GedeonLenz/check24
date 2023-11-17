@@ -8,8 +8,13 @@
     import NewChat from "./components/NewChat.svelte";
     import Notifications from "./components/Notifications.svelte";
     import {currentUser} from "$lib/chat/user";
+    import {startAllListeners} from "$lib/chat/listener";
+    import {fetchConversations} from "$lib/chat/conversations";
     export let data;
     currentUser.set(data.currentUser);
+
+    startAllListeners();
+    fetchConversations();
 </script>
 <style>
     @import './style.css';
