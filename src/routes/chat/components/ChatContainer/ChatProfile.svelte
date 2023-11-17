@@ -45,8 +45,6 @@
         margin-top:10px;
         margin-bottom: 10px;
     }
-
-
     .chat-profile .chat-title {
         display: inline-block;
         height: 60px;
@@ -57,7 +55,6 @@
         text-align: left;
         vertical-align: top;
     }
-
     .chat-profile .icon-wrapper {
         display: inline-block;
         position: absolute;
@@ -111,24 +108,27 @@
             </span>
     <span class="chat-title">{$selectedConversation !== undefined ? getOtherUsername($currentUser,$selectedConversation.conversationObj.usernames) : ''}</span>
     {#if
-        $selectedConversation !== undefined &&
+        $selectedConversation !== undefined && $currentUser !== undefined &&
         (
-            ($currentUser !== undefined &&
-            $currentUser.type === UserRole.Customer &&
             (
-                $selectedConversation.conversationObj.archived === undefined ||
-                ($selectedConversation.conversationObj.archived !== undefined && $selectedConversation.conversationObj.archived.customer === undefined) ||
-                ($selectedConversation.conversationObj.archived !== undefined && $selectedConversation.conversationObj.archived.customer !== undefined && $selectedConversation.conversationObj.archived.customer === false)
-            ))
+                $currentUser.type === UserRole.Customer &&
+                (
+                    $selectedConversation.conversationObj.archived === undefined ||
+                    ($selectedConversation.conversationObj.archived !== undefined && $selectedConversation.conversationObj.archived.customer === undefined) ||
+                    ($selectedConversation.conversationObj.archived !== undefined && $selectedConversation.conversationObj.archived.customer !== undefined && $selectedConversation.conversationObj.archived.customer === false)
+                )
+            )
             ||
-            ($currentUser !== undefined &&
-            $currentUser.type === UserRole.ServiceProvider &&
             (
-                $selectedConversation.conversationObj.archived === undefined ||
-                ($selectedConversation.conversationObj.archived !== undefined && $selectedConversation.conversationObj.archived.serviceprovider === undefined) ||
-                ($selectedConversation.conversationObj.archived !== undefined && $selectedConversation.conversationObj.archived.serviceprovider !== undefined && $selectedConversation.conversationObj.archived.serviceprovider === false)
-            ))
-        )}
+                $currentUser.type === UserRole.ServiceProvider &&
+                (
+                    $selectedConversation.conversationObj.archived === undefined ||
+                    ($selectedConversation.conversationObj.archived !== undefined && $selectedConversation.conversationObj.archived.serviceprovider === undefined) ||
+                    ($selectedConversation.conversationObj.archived !== undefined && $selectedConversation.conversationObj.archived.serviceprovider !== undefined && $selectedConversation.conversationObj.archived.serviceprovider === false)
+                )
+            )
+        )
+    }
         <div class="icon-wrapper" on:click={archiveChat}><i class="fa-solid fa-box-archive"></i></div>
     {/if}
 </div>

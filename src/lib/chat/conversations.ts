@@ -18,7 +18,6 @@ export function fetchConversations() {
 }
 
 export async function sendQuote(username:string,price:number,text:string) {
-
     fetchConversations();
 }
 
