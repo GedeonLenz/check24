@@ -2,7 +2,7 @@
 
 import ChatEntry from "./ChatWrapper/ChatEntry.svelte";
 import {
-    conversations,
+    conversations, visibleConversations,
 } from "$lib/chat/conversations";
 </script>
 <style>
@@ -29,7 +29,7 @@ import {
 </style>
 <div class="chat-wrapper">
     <div class="chat-wrapper-content">
-        {#each $conversations as conversation}
+        {#each $visibleConversations as conversation}
             <ChatEntry conversation={conversation}></ChatEntry>
         {/each}
     </div>

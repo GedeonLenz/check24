@@ -11,6 +11,7 @@
     import {startAllListeners} from "$lib/chat/listener";
     import {fetchConversations, initSelectedConversation} from "$lib/chat/conversations";
     import {onMount} from "svelte";
+    import {startAllSchedulers} from "$lib/chat/scheduler";
     export let data;
     currentUser.set(data.currentUser);
 
@@ -18,6 +19,7 @@
         await startAllListeners();
         await fetchConversations();
         await initSelectedConversation();
+        await startAllSchedulers();
     }
 
     onMount(async () => {

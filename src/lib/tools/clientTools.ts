@@ -43,8 +43,8 @@ export async function sendGET(url:string,params:StringParams) {
 /*    Conversations   */
 /**********************/
 
-export async function initConversation(sender:User,receiverUsername:string, text:string, price:number) {
-    if(sender.type != UserRole.ServiceProvider || receiverUsername == '' || text == '' || price < 0) return false;
+export async function initConversation(sender:User | undefined,receiverUsername:string, text:string, price:number) {
+    if(sender == undefined || sender.type != UserRole.ServiceProvider || receiverUsername == '' || text == '' || price < 0) return false;
     let init_Message:Message_OfferRequest = {
         sender: sender,
         messageType: MessageType.Offer,

@@ -25,6 +25,7 @@
         transform: translateY(-50%);
         cursor: pointer;
         font-size: 16px;
+        margin-left: 10px;
     }
     .chats-heading {
         display: inline-block;

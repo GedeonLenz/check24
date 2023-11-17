@@ -45,14 +45,11 @@
         border: 1px solid #EAEAEA;
         padding: 0;
     }
-
     @media screen and (max-width: 885px) {
         .message-quote .message-wrapper {
             width: 100%;
         }
     }
-
-
     .message-quote .status {
         display: block;
         position: relative;
@@ -78,8 +75,6 @@
         text-align: center;
         margin-top: 20px;
     }
-
-
     .message-quote .text {
         display: block;
         position: relative;
@@ -94,8 +89,6 @@
         font-weight: 400;
         margin-bottom: 5px;
     }
-
-
     .message-quote .accept, .message-quote .requestreview, .message-quote .decline {
         display: block;
         position: relative;

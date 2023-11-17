@@ -1,6 +1,6 @@
 import {get, writable, type Writable} from "svelte/store";
 import type {ConversationEntry, Message} from "$lib/types";
-import {selectedConversation} from "$lib/chat/conversations";
+import {selectedConversation, updateSelectedConversation} from "$lib/chat/conversations";
 import {
     getMessages,
     sendAcceptMessage,
@@ -11,7 +11,7 @@ import {
 import {currentUser} from "$lib/chat/user";
 import {error} from "$lib/chat/notifications";
 import {ConversationState, UserRole} from "$lib/types";
-import {loadingChatPanel, sendProgress} from "$lib/chat/states";
+import {fileValue, loadingChatPanel, messageField, sendProgress} from "$lib/chat/states";
 
 export const messages:Writable<Message[]>  = writable([]);
 
@@ -31,23 +31,20 @@ export async function fetchMessages(conversation:ConversationEntry | undefined,i
     loadingChatPanel.set(false);
 }
 
-
 export async function acceptOffer() {
     let sc = get(selectedConversation)
     if(sc) {
         sendProgress.set(10);
         let res = await sendAcceptMessage(get(currentUser),sc.conversationObj._id)
-        sendProgress.set(80);
         if(res != false && res.status == 200) {
-            fetchCurrentMessages();
+            sendProgress.set(100);
+            await updateSelectedConversation();
+            await fetchCurrentMessages(true);
         }
         else{
             error.set('An Error occurred while trying to send your message. Please try again later.');
         }
-        sendProgress.set(100);
-        setTimeout(() => {
-            resetProgressBar();
-        }, 500);
+        resetProgressBar();
     }
 }
 
@@ -56,45 +53,19 @@ export async function declineOffer() {
     if(sc) {
         sendProgress.set(10);
         let res = await sendRejectMessage(get(currentUser),sc?.conversationObj._id);
-        sendProgress.set(80);
         if(res != false && res.status == 200) {
-            fetchCurrentMessages();
+            sendProgress.set(100);
+            await updateSelectedConversation();
+            await fetchCurrentMessages(true);
         }
         else{
             error.set('An Error occurred while trying to send your message. Please try again later.');
         }
-        sendProgress.set(100);
-        setTimeout(() => {
-            resetProgressBar();
-        }, 500);
+        resetProgressBar();
     }
 }
-
-async function sendFileMessageRequest(fileValue: FileList | null) {
-    if (fileValue) {
-        let file: File | null = fileValue.item(0);
-        let sc = get(selectedConversation)
-        if (sc && file != null) {
-            sendProgress.set(2);
-            let updateFileProgress = (progress:number) => {
-                sendProgress.set(progress*0.8);
-            }
-            let res = await sendFileMessage(get(currentUser), sc.conversationObj._id, file,updateFileProgress);
-            if(res != false) {
-                sendProgress.set(95);
-                fetchCurrentMessages();
-                sendProgress.set(100);
-            } else {
-                error.set('An Error occurred while trying to upload you file. Please try again later.');
-            }
-            resetProgressBar();
-        }
-    }
-}
-
-let messageField = "";
-async function sendTextMessageRequest() {
-    if(messageField == "") return;
+export async function sendTextMessageRequest() {
+    if(get(messageField) == "") return;
     let cu = get(currentUser);
     let sc = get(selectedConversation)
     if(
@@ -109,23 +80,44 @@ async function sendTextMessageRequest() {
     }
     if(sc) {
         sendProgress.set(10);
-        let res = await sendTextMessage(cu,sc?.conversationObj._id,messageField);
-        sendProgress.set(80);
+        let res = await sendTextMessage(cu,sc?.conversationObj._id,get(messageField));
         if(res != false && res.status == 200) {
-            fetchCurrentMessages()
+            messageField.set("");
+            sendProgress.set(100);
+            await updateSelectedConversation();
+            await fetchCurrentMessages(true);
         }
         else{
             error.set('An Error occurred while trying to send your message. Please try again later.');
         }
-        messageField = "";
-        sendProgress.set(100);
-        setTimeout(() => {
-            resetProgressBar();
-        }, 500);
+        resetProgressBar();
     }
 }
 
-function resetProgressBar() {
+export async function sendFileMessageRequest() {
+    let fv = get(fileValue);
+    if (fv) {
+        let file: File | null = fv.item(0);
+        let sc = get(selectedConversation)
+        if (sc && file != null) {
+            sendProgress.set(2);
+            let updateFileProgress = (progress:number) => {
+                sendProgress.set(progress*0.8);
+            }
+            let res = await sendFileMessage(get(currentUser), sc.conversationObj._id, file,updateFileProgress);
+            if(res != false) {
+                sendProgress.set(100);
+                await updateSelectedConversation();
+                await fetchCurrentMessages(true);
+            } else {
+                error.set('An Error occurred while trying to upload you file. Please try again later.');
+            }
+            resetProgressBar();
+        }
+    }
+}
+
+export function resetProgressBar() {
     let progbar = document.getElementById('sendprogress')
     if(progbar) {
         progbar.style.display = 'none';
@@ -136,6 +128,11 @@ function resetProgressBar() {
     }
 }
 
+
+
+
+
+//deprecated todo
 function insertUnreadBanner() {
     const container = document.getElementById('chat-history-content');
     if(container == null) return;

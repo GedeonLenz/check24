@@ -1,5 +1,6 @@
 <script lang="ts">
     import type {Message_Reject, User} from "$lib/types";
+    import {currentUser} from "$lib/chat/user";
     export let message:Message_Reject;
 
     let mymessage = $currentUser !== undefined && message.sender.username === $currentUser.username;

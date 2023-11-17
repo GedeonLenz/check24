@@ -8,42 +8,14 @@
         getReviewRequested, requestConversationReview, reviewConversation
     } from "$lib/tools/clientTools";
     import {error, success} from "$lib/chat/notifications";
-    import {selectedConversation} from "$lib/chat/conversations";
+    import {requestReview, selectedConversation, sendReview} from "$lib/chat/conversations";
     import {currentUser} from "$lib/chat/user";
     export let message:Message_Offer;
-
     let isServiceProvider = $currentUser !== undefined && message.sender.username === $currentUser.username;
     let otherUser = $selectedConversation !== undefined ? getOtherUsername($currentUser,$selectedConversation.conversationObj.usernames) : undefined;
     let reviewRequestable = $selectedConversation !== undefined && $selectedConversation.conversationObj.dates.accepted !== undefined && dateStringToDate(getCurrentDateTime()).getTime() > dateStringToDate($selectedConversation.conversationObj.dates.accepted).getTime() && dateDiff($selectedConversation.conversationObj.dates.accepted,getCurrentDateTime()) >= 7;
     let reviewRequested = getReviewRequested($selectedConversation);
     let review = getReview($selectedConversation);
-
-    async function requestReview() {
-        if($selectedConversation !== undefined) {
-            let res = await requestConversationReview($selectedConversation.conversationObj._id);
-            if(res != false && res.status == 200) {
-                success.set('Review requested');
-                await loadMessages();
-            }
-            else{
-                error.set('An Error occurred while trying to request a review. Please try again later.');
-            }
-        }
-    }
-
-    async function sendReview(rating:number) {
-        if($selectedConversation !== undefined) {
-            let res = await reviewConversation($selectedConversation.conversationObj._id,rating);
-            if(res != false && res.status == 200) {
-                success.set('Review sent');
-                await loadMessages();
-            }
-            else{
-                error.set('An Error occurred while trying to send your review. Please try again later.');
-            }
-        }
-    }
-
 </script>
 <style>
     .star-wrapper {
