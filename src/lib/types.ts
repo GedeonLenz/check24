@@ -2,7 +2,6 @@
 //---------Users------------
 /***************************/
 //Enums
-
 export enum UserRole {
     Customer="customer",
     ServiceProvider="serviceprovider"

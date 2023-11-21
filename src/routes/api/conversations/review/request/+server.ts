@@ -1,13 +1,13 @@
 import {collection_conversations} from "$db/collections";
 import {ObjectId} from "mongodb";
-import {type ConversationUpdateRequest, UserRole} from "../../../types";
-import {checkUserRole, getUser} from "../../../auth/auth";
+import {type ConversationUpdateRequest, UserRole} from "$lib/types";
+import {checkUserRole, getUser} from "$lib/auth";
 import {
     getResponse_BadRequest,
     getResponse_Success,
     getResponse_Unauthorized,
     isUserConversationParticipant
-} from "../../../tools";
+} from "$lib/tools/serverTools";
 
 export async function POST(event:any) {
     let currentUser = await getUser(event.cookies);
@@ -16,11 +16,10 @@ export async function POST(event:any) {
     const body = await event.request.json();
     let request:ConversationUpdateRequest = body.data;
 
-    if(!(await isUserConversationParticipant(currentUser,request.conversationID))) {
-        return getResponse_Unauthorized();
-    }
-
-    if(!checkUserRole(currentUser,UserRole.ServiceProvider)) {
+    if(
+        (!(await isUserConversationParticipant(currentUser,request.conversationID))) ||
+        (!checkUserRole(currentUser,UserRole.ServiceProvider))
+    ) {
         return getResponse_Unauthorized();
     }
 

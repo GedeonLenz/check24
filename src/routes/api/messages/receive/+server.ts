@@ -1,16 +1,15 @@
 /*GET / Filter List of Conversations*/
 import {collection_messages} from "$db/collections";
-import {getUser} from "../../auth/auth";
+import {getUser} from "$lib/auth";
 import {
     extractFindData,
     getConversation,
     getResponse_BadRequest,
     getResponse_Success,
     getResponse_Unauthorized,
-    isUserConversationParticipant
-} from "../../tools";
-import type {ChatMessagesRequest, ChatMessagesResponse, Conversation, Message, TextMessage} from "../../types";
-import {ConversationState, MessageType} from "../../types";
+    isUserConversationParticipant, maskMessages
+} from "$lib/tools/serverTools";
+import type {ChatMessagesRequest, ChatMessagesResponse, Conversation, Message} from "$lib/types";
 
 export async function GET(event:any) {
     let currentUser = await getUser(event.cookies);
@@ -40,50 +39,12 @@ export async function GET(event:any) {
         return getResponse_BadRequest();
     }
 
-    const data = await collection_messages.find({conversationID:currentConversation._id},{skip: request.offset, limit:request.amount, projection: {}}).sort({"dates.created": 1}).toArray()
+    const data = await collection_messages.find({conversationID:currentConversation._id},{skip: request.offset, limit:request.amount, projection: {}}).sort({"dates.created": -1}).toArray()
     let msgs:Message[] = extractFindData<Message>(data);
+    msgs = msgs.reverse();
 
     let response:ChatMessagesResponse = {
         messages: maskMessages(currentConversation,msgs)
     }
     return getResponse_Success(response);
-}
-
-function maskMessages(conversation:Conversation ,msgs:Message[]) {
-    if(conversation.state == ConversationState.Quoted || conversation.state == ConversationState.Chatting) {
-        return msgs.map((msg:Message):Message => {
-            if(msg.messageType == MessageType.File) return msg;
-            else {
-                let textMsg:TextMessage = msg as TextMessage;
-                textMsg.text = filterContactData(textMsg.text);
-                return textMsg;
-            }
-        })
-    }
-    else return msgs;
-}
-
-function filterContactData(text:string) {
-    text = maskEmail(text);
-    text = maskURLs(text);
-    text = maskPhone(text);
-    return text;
-}
-
-function maskURLs(input:string) {
-    const domainRegex: RegExp = /(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}/g;
-    input = input.replace(domainRegex, (m:string) => '*'.repeat(m.length));
-    return input
-}
-
-function maskPhone(input:string) {
-    const phoneRegex: RegExp = /(\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*)/g;
-    input = input.replace(phoneRegex, (match:string) => match.replace(/\d/g, '*'));
-    return input
-}
-
-function maskEmail(input:string) {
-    const emailRegex: RegExp = /(?<=\w*)[\w\-._+%]*(?=\w*@)/g;
-    input = input.replace(emailRegex, (m: string) => '*'.repeat(m.length));
-    return input
 }

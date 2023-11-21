@@ -1,22 +1,17 @@
 import type {
     ConversationEntry,
-    ConversationInsertRequest,
-    ConversationListResponse,
+    ConversationInsertRequest, ConversationListResponse,
     ConversationReviewRatingRequest,
-    ConversationUpdateRequest,
-    Message_AcceptRequest,
-    Message_FileRequest,
-    Message_OfferRequest,
-    Message_RejectRequest,
-    Message_StandardRequest,
-    MessageRequest,
-    User
-} from "./api/types";
-import {MessageType, UserRole} from "./api/types";
+    ConversationUpdateRequest, Message_AcceptRequest, Message_FileRequest,
+    Message_OfferRequest, Message_RejectRequest, Message_StandardRequest, MessageRequest, User
+} from "../types";
+import {MessageType, UserRole} from "../types";
 
-/*GET and POST*/
 
-export async function sendPOST(url:string,data:object) {
+/**********************/
+/*   BASE API CALLS   */
+/**********************/
+export async function sendPOST(url:string, data:object) {
     try {
         const response:Response = await fetch(url, {
             method: 'POST',
@@ -44,10 +39,12 @@ export async function sendGET(url:string,params:StringParams) {
     }
 }
 
-/*Conversations*/
+/**********************/
+/*    Conversations   */
+/**********************/
 
-export async function initConversation(sender:User,receiverUsername:string, text:string, price:number) {
-    if(sender.type != UserRole.ServiceProvider || receiverUsername == '' || text == '' || price < 0) return false;
+export async function initConversation(sender:User | undefined,receiverUsername:string, text:string, price:number) {
+    if(sender == undefined || sender.type != UserRole.ServiceProvider || receiverUsername == '' || text == '' || price < 0) return false;
     let init_Message:Message_OfferRequest = {
         sender: sender,
         messageType: MessageType.Offer,
@@ -106,8 +103,8 @@ export async function reviewConversation(conversationID:string, rating:number) {
     return response;
 }
 
-export async function getConversations(user:User, receiverFilter:string = '',offset:number = 0, amount:number = 0):Promise<ConversationListResponse> {
-    if(user == null) return {conversations:[],lastOpened:undefined};
+export async function getConversations(user:User | undefined, receiverFilter:string = '',offset:number = 0, amount:number = 0):Promise<ConversationListResponse> {
+    if(user == undefined) return {conversations:[],lastOpened:undefined};
     let filter;
     if(receiverFilter == '') filter = {}
     else{
@@ -131,13 +128,15 @@ export async function getConversations(user:User, receiverFilter:string = '',off
     return responseObj.data;
 }
 
-/*Messages*/
+/**********************/
+/*      Messages      */
+/**********************/
 
 async function sendMessage(message:MessageRequest) {
     return await sendPOST("/api/messages/send",message);
 }
-export async function sendTextMessage(sender:User, conversationID:string, text:string) {
-    if(conversationID == '' || text == '') return false;
+export async function sendTextMessage(sender:User | undefined, conversationID:string, text:string) {
+    if(sender === undefined || conversationID == '' || text == '') return false;
     let message:Message_StandardRequest = {
         conversationID: conversationID,
         sender: sender,
@@ -147,8 +146,8 @@ export async function sendTextMessage(sender:User, conversationID:string, text:s
     return await sendMessage(message);
 }
 
-export async function sendAcceptMessage(sender:User, conversationID:string, text:string = '') {
-    if(conversationID == '') return false;
+export async function sendAcceptMessage(sender:User | undefined, conversationID:string, text:string = '') {
+    if(sender === undefined ||  conversationID == '') return false;
     let message:Message_AcceptRequest = {
         conversationID: conversationID,
         sender: sender,
@@ -158,8 +157,8 @@ export async function sendAcceptMessage(sender:User, conversationID:string, text
     return await sendMessage(message);
 }
 
-export async function sendRejectMessage(sender:User, conversationID:string, text:string = '') {
-    if(conversationID == '') return false;
+export async function sendRejectMessage(sender:User |undefined, conversationID:string, text:string = '') {
+    if(sender === undefined || conversationID == '') return false;
     let message:Message_RejectRequest = {
         conversationID: conversationID,
         sender: sender,
@@ -169,9 +168,8 @@ export async function sendRejectMessage(sender:User, conversationID:string, text
     return await sendMessage(message);
 }
 
-
-export async function sendFileMessage(sender:User, conversationID:string, file:File,callback:Function) {
-    if(conversationID == '') return false;
+export async function sendFileMessage(sender:User | undefined, conversationID:string, file:File,callback:Function) {
+    if(sender == undefined || conversationID == '') return false;
 
     let message:Message_FileRequest = {
         conversationID: conversationID,
@@ -210,8 +208,28 @@ export async function getMessages(conversationID:string,offset:number = 0,amount
 }
 
 
-//Helpers
-export function getOtherUsername(user:User,usernames:{customer:string,serviceprovider:string}) {
+/**********************/
+/*       Helpers      */
+/**********************/
+
+//Reviews
+export function getReviewRequested(currentConversation:ConversationEntry | undefined) {
+    if(currentConversation == undefined) return false;
+    let conv = currentConversation.conversationObj
+    return conv.review != undefined && conv.review.requested != undefined && conv.review?.requested == true;
+}
+export function getReview(currentConversation:ConversationEntry | undefined) {
+    if(currentConversation == undefined) return undefined;
+    let conv = currentConversation.conversationObj
+    if(conv.review != undefined && conv.review.reviewed != undefined && conv.review?.reviewed == true && conv.review.rating != undefined) {
+        return conv.review.rating;
+    }
+    return undefined;
+}
+
+//Users
+export function getOtherUsername(user:User | undefined, usernames:{customer:string,serviceprovider:string}) {
+    if (user === undefined) return undefined;
     if(user.type == UserRole.ServiceProvider) {
         return usernames.customer;
     }
@@ -220,6 +238,7 @@ export function getOtherUsername(user:User,usernames:{customer:string,servicepro
     }
 }
 
+//Files
 export function getFileExtension(filePath:string) {
     return filePath.slice(((filePath.lastIndexOf(".") - 1) >>> 0) + 2);
 }
@@ -229,6 +248,7 @@ export function getFileName(filePath:string) {
     return pathParts[pathParts.length - 1];
 }
 
+//Dates
 export function getCurrentDateTime(): string {
     return new Date().toISOString();
 }
@@ -242,17 +262,4 @@ export function dateDiff(d1:string,d2:string) {
     let d2o:Date = dateStringToDate(d2);
     const diffTime:number = Math.abs(d1o.getTime() - d2o.getTime());
     return Math.floor(diffTime / (1000 * 60 * 60 * 24));
-}
-
-export function getReviewRequested(currentConversation:ConversationEntry) {
-    let conv = currentConversation.conversationObj
-    return conv.review != undefined && conv.review.requested != undefined && conv.review?.requested == true;
-}
-
-export function getReview(currentConversation:ConversationEntry) {
-    let conv = currentConversation.conversationObj
-    if(conv.review != undefined && conv.review.reviewed != undefined && conv.review?.reviewed == true && conv.review.rating != undefined) {
-        return conv.review.rating;
-    }
-    return undefined;
 }

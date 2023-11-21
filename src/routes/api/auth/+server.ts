@@ -1,18 +1,15 @@
 import bcrypt from "bcrypt";
-import {collection_auth, collection_messages} from "$db/collections";
-import {extractFindData, getResponse_Success, getResponse_Unauthorized} from "../tools";
-import type {UserObj, UserRole} from "../types";
-import {generateJWT} from "./auth";
+import {collection_auth} from "$db/collections";
+import {extractFindData, getResponse_Success, getResponse_Unauthorized} from "$lib/tools/serverTools";
+import {generateJWT} from "$lib/auth";
+import type {UserObj} from "$lib/types";
 export async function POST(event:any) {
-    //Get cookies
     const cookies = event.cookies;
 
-    //Extract username / password
     const body = await event.request.json();
     const username = body.username;
     const password = body.password;
 
-    //Get hashed stored user password for username
     const data = await collection_auth.find({username:username},{limit:1, projection: {}}).toArray()
     let userObjs = extractFindData<UserObj>(data);
 

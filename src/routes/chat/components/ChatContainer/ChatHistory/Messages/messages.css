@@ -1,0 +1,102 @@
+.message-me, .message-other, .message-quote {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+.message-other {
+    text-align: left;
+}
+.message-me {
+    text-align: right;
+}
+.message-wrapper {
+    display: inline-block;
+    position: relative;
+    width: auto;
+    min-width: 40px;
+    max-width: 60%;
+    min-height: 37px;
+    height: auto;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+    font-family: "Helvetica Neue","Arial",sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: left;
+    box-shadow: 5px 5px 40px 0 rgba(0,0,0,0.1);
+}
+
+.message-file .message-wrapper, .message-quote .message-wrapper, .message-accept .message-wrapper, .message-decline .message-wrapper {
+    box-shadow: 5px 5px 40px 0 rgba(0,0,0,0.02);
+}
+
+.message-me .message-wrapper {
+    color: #ffffff;
+    background: #0F5AEF;
+    right: 0;
+}
+.message-other .message-wrapper {
+    color: var(--base-color);
+    background: #E9E8EA;
+    left: 0;
+}
+
+.message-accept, .message-decline {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+.message-me.message-accept, .message-me.message-decline, .message-me.message-file {
+    text-align: right;
+}
+.message-other.message-accept, .message-other.message-decline, .message-other.message-file {
+    text-align: left;
+}
+.message-accept .message-wrapper, .message-decline .message-wrapper, .message-file .message-wrapper {
+    width: 290px;
+    height: 100px;
+
+}
+.message-accept .heading, .message-decline .heading, .message-file .filename {
+    display: block;
+    font-family: "Helvetica Neue","Arial",sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+}
+.message-accept .status, .message-decline .status, .message-file .download {
+    display: block;
+    font-family: "Helvetica Neue","Arial",sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 2px;
+}
+.message-accept .details-wrapper, .message-decline .details-wrapper, .message-file .details-wrapper {
+    display: inline-block;
+    width: calc(100% - 80px - 10px);
+    box-sizing: border-box;
+    padding:10px;
+    vertical-align: middle;
+    padding-right: 0;
+    padding-left: 0;
+}
+.message-accept .icon-wrapper, .message-decline .icon-wrapper, .message-file .icon-wrapper {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 100%;
+    vertical-align: middle;
+}
+.message-accept i, .message-decline i, .message-file i {
+    display: block;
+    position: relative;
+    font-size: 40px;
+    top:50%;
+    transform: translateY(-50%);
+    text-align: center;
+}
