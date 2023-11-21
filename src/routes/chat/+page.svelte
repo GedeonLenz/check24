@@ -19,7 +19,7 @@
         await startAllListeners();
         await fetchConversations();
         await initSelectedConversation();
-        //await startAllSchedulers();
+        await startAllSchedulers();
     }
 
     onMount(async () => {
