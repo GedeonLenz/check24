@@ -10,7 +10,7 @@ import {
     reviewConversation
 } from "$lib/tools/clientTools";
 import {error, success} from "$lib/chat/notifications";
-import {fetchCurrentMessages, insertUnreadBanner, markAsRead, sendRead} from "$lib/chat/messages";
+import {fetchCurrentMessages, insertUnreadBanner, markAsRead, messages, sendRead} from "$lib/chat/messages";
 import {currentUser} from "$lib/chat/user";
 import {
     archiveMode, chatOpen,
@@ -68,6 +68,7 @@ export async function openConversation(newConversation:ConversationEntry | undef
         messagePage.set(1);
         noChat.set(false);
         chatOpen.set(true)
+        messages.set([]);
         await fetchCurrentMessages();
         let sc = get(selectedConversation);
         if(sc !== undefined && sc.unreadCount <= 0) {
