@@ -1,8 +1,7 @@
 <script lang="ts">
-
 import ChatEntry from "./ChatWrapper/ChatEntry.svelte";
 import {
-    conversations, visibleConversations,
+    visibleConversations,
 } from "$lib/chat/conversations";
 </script>
 <style>

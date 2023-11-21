@@ -1,5 +1,5 @@
 import {get, writable, type Writable} from "svelte/store";
-import type {ConversationEntry, ConversationListResponse} from "$lib/types";
+import type {ConversationEntry, ConversationListResponse, User} from "$lib/types";
 import {UserRole} from "$lib/types";
 import {
     archiveConversation,
@@ -154,13 +154,19 @@ export async function applyConversationFilterArchive(conversations:ConversationE
 }
 
 export async function applyConversationFilterSearch(conversations:ConversationEntry[]) {
-    if(get(searchQuery) != '') {
-        return conversations.filter((entry) => {
-            let otherUsername = getOtherUsername(get(currentUser),entry.conversationObj.usernames)
-            if (otherUsername == undefined) return false;
-            return otherUsername.toLowerCase().includes(get(searchQuery).toLowerCase())
+    let sq:string = get(searchQuery).toLowerCase();
+    let cu:User | undefined = get(currentUser);
+    if(sq != '') {
+        return conversations.filter((entry:ConversationEntry) => {
+            let otherUsername:string |undefined = getOtherUsername(cu,entry.conversationObj.usernames)
+            if (otherUsername == undefined) {
+                return false;
+            }
+            return otherUsername.toLowerCase().includes(sq);
         });
-    } else return conversations;
+    } else {
+        return conversations;
+    }
 }
 
 export async function requestReview() {
