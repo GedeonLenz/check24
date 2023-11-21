@@ -1,13 +1,13 @@
 /*GET / Filter List of Conversations*/
-import {getUser} from "../../auth/auth";
+import {getUser} from "$lib/auth";
 import {
     extractFindData, getLastMessage, getPictureURL,
     getResponse_BadRequest,
     getResponse_InternalError,
     getResponse_Success,
     getResponse_Unauthorized, getUnreadCount
-} from "../../tools";
-import {collection_conversations, collection_messages} from "$db/collections";
+} from "$lib/tools/serverTools";
+import {collection_conversations} from "$db/collections";
 import type {
     Conversation,
     ConversationEntry,
@@ -15,8 +15,8 @@ import type {
     ConversationListResponse,
     Message,
     User
-} from "../../types";
-import {UserRole} from "../../types";
+} from "$lib/types";
+import {UserRole} from "$lib/types";
 
 export async function GET(event:any) {
     let currentUser:User | null = await getUser(event.cookies);

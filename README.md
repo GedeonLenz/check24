@@ -12,7 +12,7 @@ The idea was to create a mobile responsive web app thats allows a user to have a
 ### Mockups
 
  ![Low fidelity mockups](https://s3.check24.gedeonlenz.com/readme/res/img/mockups.png)
- Low fidelity mockups
+ Low fidelity mockups (Final implementation deviates from initial mockups) 
 
 ### Screenshots
 
@@ -20,7 +20,7 @@ The idea was to create a mobile responsive web app thats allows a user to have a
  Screenshot Login page
  
 
- ![Screenshot chat](https://s3.check24.gedeonlenz.com/readme/res/img/screenshotchat.png)
+ ![Screenshot chat](https://s3.check24.gedeonlenz.com/readme/res/img/screenchat.jpg)
  Screenshot chat page
 
 ### Design philosophy
@@ -31,12 +31,12 @@ The main design philosophy was to create a clean, simple and inviting chat inter
 
 ### User Flow
 
- ![User flow diagram](https://s3.check24.gedeonlenz.com/readme/res/img/userflowdiagram.svg)
+ ![User flow diagram](https://s3.check24.gedeonlenz.com/readme/res/img/userflow.svg)
  User flow diagram
 
 ### Data model
 
- ![](https://s3.check24.gedeonlenz.com/readme/res/img/databasediagram.svg)
+ ![](https://s3.check24.gedeonlenz.com/readme/res/img/database.svg)
  Data model diagram
 
 

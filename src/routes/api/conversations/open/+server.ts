@@ -1,10 +1,10 @@
 import {collection_conversations, collection_messages} from "$db/collections";
-import type {ConversationUpdateRequest} from "../../types";
+import type {ConversationUpdateRequest} from "$lib/types";
 import {
     getCurrentDateTime, getResponse_InternalError, getResponse_Success,
     getResponse_Unauthorized, isUserConversationParticipant
-} from "../../tools";
-import {checkUserRole, getUser} from "../../auth/auth";
+} from "$lib/tools/serverTools";
+import {getUser} from "$lib/auth";
 import {ObjectId} from "mongodb";
 
 export async function POST(event:any) {
