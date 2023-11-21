@@ -54,11 +54,7 @@ export async function fetchMessages(conversation:ConversationEntry | undefined,i
                         }
                     }
                     if (matchingIndex !== undefined && (matchingIndex + 1) <= (newMessages.length - 1)) {
-                        console.log(matchingIndex);
-                        console.log(get(messages));
-                        console.log(matchingIndex + 1);
                         let append:Message[] = newMessages.slice(matchingIndex + 1, newMessages.length);
-                        console.log(append);
                         messages.set(get(messages).concat(append));
                     } else {
                         //no matching message found. inconsistency.

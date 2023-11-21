@@ -59,7 +59,9 @@ export async function updateSelectedConversation() {
     await fetchConversations(true);
     let updateVal:ConversationEntry | undefined = undefined;
     let newElements = get(conversations).filter((entry) => {
-        return entry.conversationObj._id === (get(selectedConversation) as ConversationEntry).conversationObj._id;
+        let sc = get(selectedConversation);
+        if(sc === undefined) return  false;
+        return entry.conversationObj._id === (sc as ConversationEntry).conversationObj._id;
     });
 
     if(newElements.length >= 1) {
@@ -68,7 +70,6 @@ export async function updateSelectedConversation() {
     if(updateVal == undefined) noChat.set(true);
     noSelectTrigger.set(true);
     selectedConversation.set(updateVal);
-    console.log(get(selectedConversation));
 }
 
 export async function sendQuote() {
