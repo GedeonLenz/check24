@@ -16,7 +16,7 @@ import {
     archiveMode, chatOpen,
     loadingChatList, messagePage,
     newChatVisible,
-    noChat, noSelectTrigger,
+    noChat,
     quote_price,
     quote_text,
     quote_username,
