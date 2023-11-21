@@ -33,7 +33,6 @@ export const visibleConversations:Writable<ConversationEntry[]>  = writable([]);
 
 export async function fetchConversations(invisible:boolean = false) {
     if(!invisible) {
-        console.log("invf")
         loadingChatList.set(true);
     }
     let conversationData:ConversationListResponse = await getConversations(get(currentUser),get(searchQuery));
@@ -74,8 +73,7 @@ export async function openConversation(newConversation:ConversationEntry | undef
         if(sc !== undefined && sc.unreadCount <= 0) {
             markAsRead()
         }
-        insertUnreadBanner();
-
+        insertUnreadBanner(true);
         sendRead();
     }
 }

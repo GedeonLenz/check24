@@ -190,7 +190,7 @@ export async function checkScrollLoad(event:any) {
     }
 }
 
-export function insertUnreadBanner() {
+export function insertUnreadBanner(scroll:boolean = false) {
     const container = document.getElementById('chat-history-content');
     if(container == null) return;
     const prevBanner = container.querySelector('.unread-banner');
@@ -204,9 +204,11 @@ export function insertUnreadBanner() {
     }
     const firstUnreadElement = container.querySelector('.message-unread');
     if (firstUnreadElement) {
-        firstUnreadElement.scrollIntoView({
-            behavior: 'smooth'
-        });
+        if(scroll) {
+            firstUnreadElement.scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
         const groupElements = document.querySelectorAll('.chat-message');
         const isFirstMessage = Array.from(groupElements).indexOf(firstUnreadElement as Element) === 0;
 
@@ -223,10 +225,12 @@ export function insertUnreadBanner() {
         }
     }
     else{
-        container.scrollTo({
-            top: container.scrollHeight,
-            behavior: "smooth",
-        });
+        if(scroll) {
+            container.scrollTo({
+                top: container.scrollHeight,
+                behavior: "smooth",
+            });
+        }
     }
 }
 
