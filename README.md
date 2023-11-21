@@ -95,6 +95,9 @@ As my S3 service provider, I chose Cloudflare R2 because of the fast performance
 
 Similar to Amazon S3, Cloudflare R2 allows developers to store and retrieve large amounts of data, such as images, videos, and other content, in the cloud. It's built on Cloudflare's global network, leveraging its widespread points of presence to ensure low-latency access and high availability of stored data. Cloudflare R2 emphasizes simplicity and performance, aiming to simplify the process of storing and serving data while offering robust security features. 
 
+### ImageKit.io
+
+ImageKit is the service I use for compressing and serving images / files uploaded by the user to the the Cloudflare R2 storage. This results in faster load times of the chat application.
 
 ## Demo
 
