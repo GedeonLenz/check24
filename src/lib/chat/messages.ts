@@ -23,7 +23,9 @@ const MESSAGES_PER_PAGE:number = 25;
 
 export async function fetchMessages(conversation:ConversationEntry | undefined,invisible:boolean = false, addPage:boolean = false) {
     if(conversation === undefined) return false;
-    if(!invisible) loadingChatPanel.set(true);
+    if(!invisible) {
+        loadingChatPanel.set(true);
+    }
     let offset = 0;
     let amount = MESSAGES_PER_PAGE;
     if(addPage) {
