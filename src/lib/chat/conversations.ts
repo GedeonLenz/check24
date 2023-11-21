@@ -32,7 +32,10 @@ export const visibleConversations:Writable<ConversationEntry[]>  = writable([]);
 
 
 export async function fetchConversations(invisible:boolean = false) {
-    if(!invisible) loadingChatList.set(true);
+    if(!invisible) {
+        console.log("invf")
+        loadingChatList.set(true);
+    }
     let conversationData:ConversationListResponse = await getConversations(get(currentUser),get(searchQuery));
     conversations.set(conversationData.conversations);
     lastOpenedConversation.set(conversationData.lastOpened);
@@ -60,7 +63,9 @@ export async function updateSelectedConversation() {
     let updateVal:ConversationEntry | undefined = undefined;
     let newElements = get(conversations).filter((entry) => {
         let sc = get(selectedConversation);
-        if(sc === undefined) return  false;
+        if(sc === undefined) {
+            return false;
+        }
         return entry.conversationObj._id === (sc as ConversationEntry).conversationObj._id;
     });
 

@@ -2,7 +2,7 @@ import {get, writable, type Writable} from "svelte/store";
 import type {ConversationEntry, Message} from "$lib/types";
 import {selectedConversation, updateSelectedConversation} from "$lib/chat/conversations";
 import {
-    getMessages,
+    getMessages, openConversation,
     sendAcceptMessage,
     sendFileMessage,
     sendRejectMessage,
@@ -46,6 +46,7 @@ export async function fetchMessages(conversation:ConversationEntry | undefined,i
                 messages.set(newMessages.concat(get(messages)));
                 markAsRead();
                 insertUnreadBanner();
+                sendRead();
             }
         }
         else{
@@ -85,6 +86,7 @@ export async function acceptOffer() {
             await fetchCurrentMessages(true);
             markAsRead();
             insertUnreadBanner();
+            sendRead();
         }
         else{
             error.set('An Error occurred while trying to send your message. Please try again later.');
@@ -104,6 +106,7 @@ export async function declineOffer() {
             await fetchCurrentMessages(true);
             markAsRead();
             insertUnreadBanner();
+            sendRead();
         }
         else{
             error.set('An Error occurred while trying to send your message. Please try again later.');
@@ -135,6 +138,7 @@ export async function sendTextMessageRequest() {
             await fetchCurrentMessages(true);
             markAsRead();
             insertUnreadBanner();
+            sendRead();
         }
         else{
             error.set('An Error occurred while trying to send your message. Please try again later.');
@@ -160,6 +164,7 @@ export async function sendFileMessageRequest() {
                 await fetchCurrentMessages(true);
                 markAsRead();
                 insertUnreadBanner();
+                sendRead();
             } else {
                 error.set('An Error occurred while trying to upload you file. Please try again later.');
             }
@@ -218,4 +223,14 @@ export function markAsRead() {
     Array.from(document.querySelectorAll('.message-unread')).forEach(function(el) {
         el.classList.remove('message-unread');
     });
+}
+
+export async function sendRead() {
+    let sc = get(selectedConversation);
+    if( sc !== undefined) {
+        let res = await openConversation(sc.conversationObj._id);
+        if(res == false || res.status != 200) {
+            error.set('An Error occurred while trying to update your chat status');
+        }
+    }
 }

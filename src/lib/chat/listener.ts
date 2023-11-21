@@ -16,7 +16,7 @@ import {
 } from "$lib/chat/conversations";
 import {openConversation} from "$lib/tools/clientTools";
 import {get} from "svelte/store";
-import {fetchCurrentMessages, insertUnreadBanner, markAsRead} from "$lib/chat/messages";
+import {fetchCurrentMessages, insertUnreadBanner, markAsRead, sendRead} from "$lib/chat/messages";
 
 export async function startAllListeners() {
     await startNotificationListener();
@@ -42,14 +42,9 @@ async function startListenerSelectedConversation() {
             noChat.set(false);
             chatOpen.set(true)
             await fetchCurrentMessages();
+            markAsRead();
             insertUnreadBanner();
-            let res = await openConversation(selectedConversation.conversationObj._id);
-            if(res == false || res.status != 200) {
-                error.set('An Error occurred while trying to update your chat status');
-            }
-            else{
-                markAsRead();
-            }
+            sendRead();
         }
     });
 }
