@@ -20,7 +20,7 @@ The idea was to create a mobile responsive web app thats allows a user to have a
  Screenshot Login page
  
 
- ![Screenshot chat](https://s3.check24.gedeonlenz.com/readme/res/img/screenchat.png)
+ ![Screenshot chat](https://s3.check24.gedeonlenz.com/readme/res/img/screenchat.jpg)
  Screenshot chat page
 
 ### Design philosophy
