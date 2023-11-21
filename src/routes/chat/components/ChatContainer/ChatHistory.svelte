@@ -35,16 +35,6 @@
         margin-bottom: 20px;
         background: transparent;
     }
-
-    .unread-banner span {
-        display: block;
-        position: relative;
-        line-height: 15px;
-        color: #939393;
-        font-family: "Helvetica Neue","Arial",sans-serif;
-        font-size: 15px;
-        font-weight: 600;
-    }
 </style>
 <div class="chat-history">
     <div class="chat-history-content" id="chat-history-content" on:scroll={checkScrollLoad}>

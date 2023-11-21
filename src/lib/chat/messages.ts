@@ -174,3 +174,38 @@ export async function checkScrollLoad(event:any) {
         await fetchCurrentMessages(true, true);
     }
 }
+
+export function insertUnreadBanner() {
+    const container = document.getElementById('chat-history-content');
+    if(container == null) return;
+    const prevBanner = container.querySelector('.unread-banner');
+    if(prevBanner){
+        if(prevBanner.classList.contains('first-message')) {
+            const tempContainer = document.createElement('div');
+            tempContainer.innerHTML = '<div id="top-placeholder"></div>'
+            container.insertBefore(tempContainer.firstChild as ChildNode, prevBanner);
+        }
+        prevBanner.remove();
+    }
+    const firstUnreadElement = container.querySelector('.message-unread');
+    if (firstUnreadElement) {
+        const groupElements = document.querySelectorAll('.chat-message');
+        const isFirstMessage = Array.from(groupElements).indexOf(firstUnreadElement as Element) === 0;
+
+        const tempContainer = document.createElement('div');
+        tempContainer.innerHTML = '<div class="chat-message unread-banner" id="unread-banner"><span>Unread messages</span></div>'
+        if(isFirstMessage) tempContainer.innerHTML = '<div class="chat-message unread-banner first-message"><span>Unread messages</span></div>'
+        container.insertBefore(tempContainer.firstChild as ChildNode, firstUnreadElement);
+
+        if (isFirstMessage) {
+            let placeholder = document.getElementById('top-placeholder')
+            if(placeholder) placeholder.remove();
+        }
+    }
+}
+
+export function markAsRead() {
+    Array.from(document.querySelectorAll('.message-unread')).forEach(function(el) {
+        el.classList.remove('message-unread');
+    });
+}
