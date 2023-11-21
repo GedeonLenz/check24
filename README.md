@@ -172,7 +172,7 @@ A list of possible optimizations and features for the future:
 * Integration of payment provider and creation of payment page
 * In chat preview of other file formats besides images like video, audio, ms office and so on
 * In chat preview of links and making urls in chats clickable
-* Compress media files that are send [Done]
+* Compress media files that are send (Done)
 * More soft animations when opening /closing a chat / archive / popups
 * Clicking on images or media to invoke full size preview
 * Deletion of conversations besides the existing feature of archiving a chat
