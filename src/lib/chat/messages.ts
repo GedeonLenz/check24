@@ -44,6 +44,8 @@ export async function fetchMessages(conversation:ConversationEntry | undefined,i
             if(get(messages).length === 0 || (newMessages.length >= 1 && newMessages[0]._id !== get(messages)[0]._id)) {
                 messagePage.set(get(messagePage)+1);
                 messages.set(newMessages.concat(get(messages)));
+                markAsRead();
+                insertUnreadBanner();
             }
         }
         else{
