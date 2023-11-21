@@ -31,12 +31,12 @@ The main design philosophy was to create a clean, simple and inviting chat inter
 
 ### User Flow
 
- ![User flow diagram](https://s3.check24.gedeonlenz.com/readme/res/img/userflowdiagram.svg)
+ ![User flow diagram](https://s3.check24.gedeonlenz.com/readme/res/img/userflow.svg)
  User flow diagram
 
 ### Data model
 
- ![](https://s3.check24.gedeonlenz.com/readme/res/img/databasediagram.svg)
+ ![](https://s3.check24.gedeonlenz.com/readme/res/img/database.svg)
  Data model diagram
 
 
