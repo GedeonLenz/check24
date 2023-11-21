@@ -1,5 +1,5 @@
 import {writable, type Writable} from "svelte/store";
-import {fetchConversations, updateSelectedConversation} from "$lib/chat/conversations";
+import {updateSelectedConversation} from "$lib/chat/conversations";
 import {fetchCurrentMessages} from "$lib/chat/messages";
 
 export const schedulaerChatList:Writable<NodeJS.Timeout | null>  = writable(null);

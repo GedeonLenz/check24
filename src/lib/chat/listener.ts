@@ -1,22 +1,15 @@
 import {error, resetError, resetSuccess, success} from "$lib/chat/notifications";
 import {
     archiveMode,
-    chatOpen,
-    messagePage,
-    noChat,
-    noSelectTrigger,
     searchQuery
 } from "$lib/chat/states";
 import {
     applyConversationFilterArchive, applyConversationFilterSearch,
-    conversations, fetchConversations,
-    selectedConversation,
+    conversations,
     viewConversations,
     visibleConversations
 } from "$lib/chat/conversations";
-import {openConversation} from "$lib/tools/clientTools";
 import {get} from "svelte/store";
-import {fetchCurrentMessages, insertUnreadBanner, markAsRead, sendRead} from "$lib/chat/messages";
 
 export async function startAllListeners() {
     await startNotificationListener();
