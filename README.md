@@ -155,6 +155,14 @@ Run in project root:
 ```javascript
  npm run preview
 ```
+(Adapter settings might need to be adjusted before.)
+
+Alternatively:
+Run in project root:
+
+```javascript
+ npm run dev
+```
 
 
 ## Optimizations
