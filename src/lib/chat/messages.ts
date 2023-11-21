@@ -81,6 +81,8 @@ export async function acceptOffer() {
             sendProgress.set(100);
             await updateSelectedConversation();
             await fetchCurrentMessages(true);
+            markAsRead();
+            insertUnreadBanner();
         }
         else{
             error.set('An Error occurred while trying to send your message. Please try again later.');
@@ -98,6 +100,8 @@ export async function declineOffer() {
             sendProgress.set(100);
             await updateSelectedConversation();
             await fetchCurrentMessages(true);
+            markAsRead();
+            insertUnreadBanner();
         }
         else{
             error.set('An Error occurred while trying to send your message. Please try again later.');
@@ -127,6 +131,8 @@ export async function sendTextMessageRequest() {
             sendProgress.set(100);
             await updateSelectedConversation();
             await fetchCurrentMessages(true);
+            markAsRead();
+            insertUnreadBanner();
         }
         else{
             error.set('An Error occurred while trying to send your message. Please try again later.');
@@ -150,6 +156,8 @@ export async function sendFileMessageRequest() {
                 sendProgress.set(100);
                 await updateSelectedConversation();
                 await fetchCurrentMessages(true);
+                markAsRead();
+                insertUnreadBanner();
             } else {
                 error.set('An Error occurred while trying to upload you file. Please try again later.');
             }
