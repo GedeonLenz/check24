@@ -10,7 +10,7 @@ export async function startAllSchedulers() {
     await startChatMessageUpdater();
 }
 
-const delay = 15*1000;
+const delay = 5*1000;
 export async function startChatListUpdater() {
     let scheduler = setInterval(async () => {
         await updateSelectedConversation();
