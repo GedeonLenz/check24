@@ -125,3 +125,9 @@
     font-size: 15px;
     font-weight: 600;
 }
+
+#top-placeholder {
+    display: block;
+    position: relative;
+    margin-bottom: 50px;
+}
