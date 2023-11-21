@@ -204,18 +204,29 @@ export function insertUnreadBanner() {
     }
     const firstUnreadElement = container.querySelector('.message-unread');
     if (firstUnreadElement) {
+        firstUnreadElement.scrollIntoView({
+            behavior: 'smooth'
+        });
         const groupElements = document.querySelectorAll('.chat-message');
         const isFirstMessage = Array.from(groupElements).indexOf(firstUnreadElement as Element) === 0;
 
         const tempContainer = document.createElement('div');
         tempContainer.innerHTML = '<div class="chat-message unread-banner" id="unread-banner"><span>Unread messages</span></div>'
-        if(isFirstMessage) tempContainer.innerHTML = '<div class="chat-message unread-banner first-message"><span>Unread messages</span></div>'
+        if(isFirstMessage) {
+            tempContainer.innerHTML = '<div class="chat-message unread-banner first-message"><span>Unread messages</span></div>'
+        }
         container.insertBefore(tempContainer.firstChild as ChildNode, firstUnreadElement);
 
         if (isFirstMessage) {
             let placeholder = document.getElementById('top-placeholder')
             if(placeholder) placeholder.remove();
         }
+    }
+    else{
+        container.scrollTo({
+            top: container.scrollHeight,
+            behavior: "smooth",
+        });
     }
 }
 
