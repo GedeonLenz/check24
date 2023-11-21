@@ -7,7 +7,11 @@ import {MessageType} from "$lib/types";
 import {currentUser} from "$lib/chat/user";
 export let conversation:ConversationEntry;
 
-let isActive = $selectedConversation !== undefined && (conversation.conversationObj._id === $selectedConversation.conversationObj._id);
+let isActive:boolean;
+$: {
+    isActive = $selectedConversation !== undefined && (conversation.conversationObj._id === $selectedConversation.conversationObj._id);
+}
+isActive = isActive;
 
 function displayLastMessage(lastMessage:Message) {
     let type = lastMessage.messageType;

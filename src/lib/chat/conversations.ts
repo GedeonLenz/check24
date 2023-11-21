@@ -10,7 +10,7 @@ import {
     reviewConversation
 } from "$lib/tools/clientTools";
 import {error, success} from "$lib/chat/notifications";
-import {fetchCurrentMessages} from "$lib/chat/messages";
+import {fetchCurrentMessages, messages} from "$lib/chat/messages";
 import {currentUser} from "$lib/chat/user";
 import {
     archiveMode,
@@ -68,7 +68,7 @@ export async function updateSelectedConversation() {
     if(updateVal == undefined) noChat.set(true);
     noSelectTrigger.set(true);
     selectedConversation.set(updateVal);
-    console.log(updateVal)
+    console.log(get(selectedConversation));
 }
 
 export async function sendQuote() {
@@ -144,6 +144,7 @@ export async function requestReview() {
         let res = await requestConversationReview(sc.conversationObj._id);
         if(res != false && res.status == 200) {
             success.set('Review requested');
+            await updateSelectedConversation();
             await fetchCurrentMessages(true);
         }
         else{
@@ -158,6 +159,7 @@ export async function sendReview(rating:number) {
         let res = await reviewConversation(sc.conversationObj._id,rating);
         if(res != false && res.status == 200) {
             success.set('Review sent');
+            await updateSelectedConversation();
             await fetchCurrentMessages(true);
         }
         else{

@@ -44,7 +44,7 @@
         <div class="input-wrapper">
             <span class="greeting">Welcome! Please login to access your chats</span>
             <input bind:value={username} name="username" type="text" required  placeholder="Username"/>
-            <input bind:value={password} name="password"  type="password" required placeholder="Password"/>
+            <input bind:value={password} name="password"  type="password" required placeholder="Password" on:keydown={(event) => {if(event.key === 'Enter'){login()}}}/>
             <button on:click={() => {login()}} type="submit">Sign in</button>
         </div>
     </div>

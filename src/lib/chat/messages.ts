@@ -11,22 +11,66 @@ import {
 import {currentUser} from "$lib/chat/user";
 import {error} from "$lib/chat/notifications";
 import {ConversationState, UserRole} from "$lib/types";
-import {fileValue, loadingChatPanel, messageField, sendProgress} from "$lib/chat/states";
+import {fileValue, loadingChatPanel, messageField, messagePage, sendProgress} from "$lib/chat/states";
 
 export const messages:Writable<Message[]>  = writable([]);
 
-export async function fetchCurrentMessages(invisible:boolean = false) {
-    await fetchMessages(get(selectedConversation),invisible);
+export async function fetchCurrentMessages(invisible:boolean = false, addPage:boolean = false) {
+    await fetchMessages(get(selectedConversation),invisible,addPage);
 }
-export async function fetchMessages(conversation:ConversationEntry | undefined,invisible:boolean = false) {
+
+const MESSAGES_PER_PAGE:number = 25;
+
+export async function fetchMessages(conversation:ConversationEntry | undefined,invisible:boolean = false, addPage:boolean = false) {
     if(conversation === undefined) return false;
     if(!invisible) loadingChatPanel.set(true);
-    let res = await getMessages(conversation.conversationObj._id);
+    let offset = 0;
+    let amount = MESSAGES_PER_PAGE;
+    if(addPage) {
+        offset = MESSAGES_PER_PAGE * get(messagePage);
+        amount = MESSAGES_PER_PAGE;
+    }
+    let res = await getMessages(conversation.conversationObj._id,offset,amount);
     if(res === false || res.status !== 200) {
         error.set('Failed to load conversation!');
     }
     else{
-        messages.set((await res.json()).data.messages);
+        let newMessages:Message[] = (await res.json()).data.messages;
+        let lastPresentMessageID = get(messages).length >= 1 ? get(messages)[get(messages).length-1]._id : undefined;
+        let matchingIndex = undefined;
+        if(addPage) {
+            let prepend:Message[] = newMessages;
+            if(get(messages).length === 0 || (newMessages.length >= 1 && newMessages[0]._id !== get(messages)[0]._id)) {
+                messagePage.set(get(messagePage)+1);
+                messages.set(prepend.concat(get(messages)));
+            }
+        }
+        else{
+            if (lastPresentMessageID !== undefined) {
+                if (newMessages.length >= 1) {
+                    for (let i = newMessages.length - 1; i >= 0; i--) {
+                        if (newMessages[i]._id === lastPresentMessageID) {
+                            matchingIndex = i;
+                            break;
+                        }
+                    }
+                    if (matchingIndex !== undefined && (matchingIndex + 1) <= (newMessages.length - 1)) {
+                        console.log(matchingIndex);
+                        console.log(get(messages));
+                        console.log(matchingIndex + 1);
+                        let append:Message[] = newMessages.slice(matchingIndex + 1, newMessages.length);
+                        console.log(append);
+                        messages.set(get(messages).concat(append));
+                    } else {
+                        //no matching message found. inconsistency.
+                    }
+                } else {
+                    //no received messages. do nothing
+                }
+            } else {
+                messages.set(newMessages);
+            }
+        }
     }
     loadingChatPanel.set(false);
 }
@@ -160,5 +204,11 @@ function insertUnreadBanner() {
             let placeholder = document.getElementById('top-placeholder')
             if(placeholder) placeholder.remove();
         }
+    }
+}
+
+export async function checkScrollLoad(event:any) {
+    if (event.target.scrollTop === 0) {
+        await fetchCurrentMessages(true, true);
     }
 }

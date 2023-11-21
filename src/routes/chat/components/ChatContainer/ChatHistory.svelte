@@ -5,7 +5,7 @@
     import MessageFile from "../ChatContainer/ChatHistory/Messages/MessageFile.svelte";
     import MessageReject from "../ChatContainer/ChatHistory/Messages/MessageReject.svelte";
     import MessageQuote from "../ChatContainer/ChatHistory/Messages/MessageQuote.svelte";
-    import {messages} from "$lib/chat/messages";
+    import {checkScrollLoad, messages} from "$lib/chat/messages";
 </script>
 <style>
     @import "ChatHistory/Messages/messages.css";
@@ -61,7 +61,7 @@
     }
 </style>
 <div class="chat-history">
-    <div class="chat-history-content" id="chat-history-content" >
+    <div class="chat-history-content" id="chat-history-content" on:scroll={checkScrollLoad}>
         <div id="top-placeholder"></div>
         {#each $messages as message}
             {#if message.messageType === MessageType.File}

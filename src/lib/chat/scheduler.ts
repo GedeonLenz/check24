@@ -6,8 +6,8 @@ export const schedulaerChatList:Writable<NodeJS.Timeout | null>  = writable(null
 export const schedulaerChatMessages:Writable<NodeJS.Timeout | null>  = writable(null);
 
 export async function startAllSchedulers() {
-    //await startChatListUpdater();
-    //await startChatMessageUpdater();
+    await startChatListUpdater();
+    await startChatMessageUpdater();
 }
 
 const delay = 15*1000;

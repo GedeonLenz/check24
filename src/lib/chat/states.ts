@@ -16,3 +16,5 @@ export const quote_text:Writable<string>  = writable("");
 export const quote_price:Writable<number>  = writable(0);
 
 export const noSelectTrigger:Writable<boolean>  = writable(false);
+
+export const messagePage:Writable<number>  = writable();

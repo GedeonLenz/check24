@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {ConversationEntry, Message_Offer, User} from "$lib/types";
+    import type {Message_Offer} from "$lib/types";
     import {
         dateDiff,
         dateStringToDate,
@@ -7,17 +7,77 @@
         getOtherUsername, getReview,
         getReviewRequested, requestConversationReview, reviewConversation
     } from "$lib/tools/clientTools";
-    import {error, success} from "$lib/chat/notifications";
     import {requestReview, selectedConversation, sendReview} from "$lib/chat/conversations";
     import {currentUser} from "$lib/chat/user";
     export let message:Message_Offer;
-    let isServiceProvider = $currentUser !== undefined && message.sender.username === $currentUser.username;
-    let otherUser = $selectedConversation !== undefined ? getOtherUsername($currentUser,$selectedConversation.conversationObj.usernames) : undefined;
-    let reviewRequestable = $selectedConversation !== undefined && $selectedConversation.conversationObj.dates.accepted !== undefined && dateStringToDate(getCurrentDateTime()).getTime() > dateStringToDate($selectedConversation.conversationObj.dates.accepted).getTime() && dateDiff($selectedConversation.conversationObj.dates.accepted,getCurrentDateTime()) >= 7;
-    let reviewRequested = getReviewRequested($selectedConversation);
-    let review = getReview($selectedConversation);
+    let isServiceProvider:boolean;
+    let otherUser:string | undefined;
+    let reviewRequestable:boolean;
+    let reviewRequested:boolean;
+    let review:number | undefined;
+    $: {
+        isServiceProvider = $currentUser !== undefined && message.sender.username === $currentUser.username;
+        otherUser = $selectedConversation !== undefined ? getOtherUsername($currentUser,$selectedConversation.conversationObj.usernames) : undefined;
+        reviewRequestable = $selectedConversation !== undefined && $selectedConversation.conversationObj.dates.accepted !== undefined && dateStringToDate(getCurrentDateTime()).getTime() > dateStringToDate($selectedConversation.conversationObj.dates.accepted).getTime() && dateDiff($selectedConversation.conversationObj.dates.accepted,getCurrentDateTime()) >= 7;
+        reviewRequested = getReviewRequested($selectedConversation);
+        review = getReview($selectedConversation);
+    }
+    isServiceProvider = isServiceProvider;
 </script>
 <style>
+    .requestreview {
+        background: var(--button-color);
+        color: #ffffff;
+    }
+    .requestreview {
+        margin-bottom: 20px;
+    }
+
+    .requestreview:hover {
+        background: #0c4ccb;
+        transform: scale(1.01);
+    }
+    .requestreview  {
+        display: block;
+        position: relative;
+        width: calc(100% - 40px);
+        height: 50px;
+        border-radius: 10px;
+        border: none;
+        font-family: "Helvetica Neue","Arial",sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 10px;
+        cursor: pointer;
+        margin-left: 20px;
+        margin-right: 20px;
+        transition: 0.2s;
+        transform: scale(1);
+    }
+    .notice {
+        display: block;
+        position: relative;
+        width: calc(100% - 20px);
+        height: 50px;
+        line-height: 50px;
+        border-radius: 10px;
+        padding-left: 15px;
+        border: none;
+        font-family: "Helvetica Neue","Arial",sans-serif;
+        font-size: 15px;
+        font-weight: 400;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+        margin-left: 10px;
+        margin-right: 10px;
+        transition: 0.2s;
+        transform: scale(1);
+        background: rgba(15, 90, 239, 0.66);
+        border-left: 10px solid #0F5AEFFF;
+        border-right: 10px solid #0F5AEFFF;
+        color: #ffffff;
+        text-align:center;
+    }
     .star-wrapper {
         display: flex;
         position: relative;
@@ -31,7 +91,6 @@
         margin-bottom: 20px;
         margin-top: 20px;
     }
-
     .review-desc {
         display: block;
         position: relative;

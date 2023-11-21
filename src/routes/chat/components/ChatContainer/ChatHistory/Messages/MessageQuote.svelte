@@ -8,28 +8,35 @@
 
     export let message:Message_Offer;
 
-    let mymessage = $currentUser !== undefined && message.sender.username === $currentUser.username;
-    let unread = !mymessage && message.read === false;
+    let mymessage:boolean;
+    let unread:boolean;
+    let isServiceProvider:boolean | undefined;
+    let isStateBeginning:boolean;
+    let isStateAccepted:boolean;
+    let isStateRejected:boolean;
+    let isValidState:boolean;
 
-    let isServiceProvider = $currentUser !== undefined ? message.sender.username === $currentUser.username : undefined;
-
-
-    let isStateBeginning = ($selectedConversation !== undefined && $selectedConversation.conversationObj.state === ConversationState.Quoted) || ($selectedConversation !== undefined && $selectedConversation.conversationObj.state === ConversationState.Chatting);
-    let isStateAccepted = ($selectedConversation !== undefined && $selectedConversation.conversationObj.state === ConversationState.Accepted);
-    let isStateRejected = ($selectedConversation !== undefined && $selectedConversation.conversationObj.state === ConversationState.Rejected);
-    let isValidState = isStateBeginning || isStateAccepted || isStateRejected;
-
-    let status = "";
-    if(isServiceProvider) {
-        if(isStateBeginning) status="Pending customer decision";
-        else if(isStateAccepted) status="Accepted Quote";
-        else if(isStateRejected) status="Rejected Quote";
+    let statuslabel = "";
+    $: {
+        mymessage = $currentUser !== undefined && message.sender.username === $currentUser.username;
+        unread = !mymessage && message.read === false;
+        isServiceProvider = $currentUser !== undefined ? message.sender.username === $currentUser.username : undefined;
+        isStateBeginning = ($selectedConversation !== undefined && $selectedConversation.conversationObj.state === ConversationState.Quoted) || ($selectedConversation !== undefined && $selectedConversation.conversationObj.state === ConversationState.Chatting);
+        isStateAccepted = ($selectedConversation !== undefined && $selectedConversation.conversationObj.state === ConversationState.Accepted);
+        isStateRejected = ($selectedConversation !== undefined && $selectedConversation.conversationObj.state === ConversationState.Rejected);
+        isValidState = isStateBeginning || isStateAccepted || isStateRejected;
+        if(isServiceProvider) {
+            if(isStateBeginning) statuslabel="Pending customer decision";
+            else if(isStateAccepted) statuslabel="Accepted Quote";
+            else if(isStateRejected) statuslabel="Rejected Quote";
+        }
+        else{
+            if(isStateBeginning) statuslabel="Received Quote";
+            else if(isStateAccepted) statuslabel="Accepted Quote";
+            else if(isStateRejected) statuslabel="Rejected Quote";
+        }
     }
-    else{
-        if(isStateBeginning) status="Received Quote";
-        else if(isStateAccepted) status="Accepted Quote";
-        else if(isStateRejected) status="Rejected Quote";
-    }
+    mymessage = mymessage;
 </script>
 <style>
     .message-quote {
@@ -89,84 +96,12 @@
         font-weight: 400;
         margin-bottom: 5px;
     }
-    .message-quote .accept, .message-quote .requestreview, .message-quote .decline {
-        display: block;
-        position: relative;
-        width: calc(100% - 40px);
-        height: 50px;
-        border-radius: 10px;
-        border: none;
-        font-family: "Helvetica Neue","Arial",sans-serif;
-        font-size: 16px;
-        font-weight: 500;
-        margin-bottom: 10px;
-        cursor: pointer;
-        margin-left: 20px;
-        margin-right: 20px;
-        transition: 0.2s;
-        transform: scale(1);
-    }
-
-    .message-quote .accept, .message-quote .requestreview {
-        background: var(--button-color);
-        color: #ffffff;
-    }
-    .message-quote .requestreview {
-        margin-bottom: 20px;
-    }
-
-    .message-quote .requestreview:hover {
-        background: #0c4ccb;
-        transform: scale(1.01);
-    }
-
-    .message-quote .accept:hover {
-        background: #0c4ccb;
-        transform: scale(1.01);
-    }
-
-    .message-quote .decline {
-        background: #ffffff;
-        color: var(--base-color);
-        border: 2px solid #EAEAEA;
-        margin-bottom: 20px;
-    }
-
-    .message-quote .decline:hover {
-        background: #f8f8f8;
-        transform: scale(1.01);
-    }
-
-    .message-quote .notice {
-        display: block;
-        position: relative;
-        width: calc(100% - 20px);
-        height: 50px;
-        line-height: 50px;
-        border-radius: 10px;
-        padding-left: 15px;
-        border: none;
-        font-family: "Helvetica Neue","Arial",sans-serif;
-        font-size: 15px;
-        font-weight: 400;
-        margin-bottom: 10px;
-        box-sizing: border-box;
-        margin-left: 10px;
-        margin-right: 10px;
-        transition: 0.2s;
-        transform: scale(1);
-        background: rgba(15, 90, 239, 0.66);
-        border-left: 10px solid #0F5AEFFF;
-        border-right: 10px solid #0F5AEFFF;
-        color: #ffffff;
-        text-align:center;
-    }
 </style>
 {#if $selectedConversation !== undefined && isValidState}
     <div class="chat-message message-quote message-quote-sent {unread ? 'message-unread' : ''}">
         <div class="message-wrapper">
             <span class="price">{message.details.price}€</span>
-            <span class="status">{status}</span>
+            <span class="status">{statuslabel}</span>
             <p class="text">{message.text}</p>
             {#if isStateBeginning}
                 {#if !isServiceProvider}

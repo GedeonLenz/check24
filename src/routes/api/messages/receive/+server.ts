@@ -39,8 +39,9 @@ export async function GET(event:any) {
         return getResponse_BadRequest();
     }
 
-    const data = await collection_messages.find({conversationID:currentConversation._id},{skip: request.offset, limit:request.amount, projection: {}}).sort({"dates.created": 1}).toArray()
+    const data = await collection_messages.find({conversationID:currentConversation._id},{skip: request.offset, limit:request.amount, projection: {}}).sort({"dates.created": -1}).toArray()
     let msgs:Message[] = extractFindData<Message>(data);
+    msgs = msgs.reverse();
 
     let response:ChatMessagesResponse = {
         messages: maskMessages(currentConversation,msgs)

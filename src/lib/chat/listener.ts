@@ -1,5 +1,13 @@
 import {error, resetError, resetSuccess, success} from "$lib/chat/notifications";
-import {archiveMode, chatOpen, loadingChatPanel, noChat, noSelectTrigger, searchQuery} from "$lib/chat/states";
+import {
+    archiveMode,
+    chatOpen,
+    loadingChatPanel,
+    messagePage,
+    noChat,
+    noSelectTrigger,
+    searchQuery
+} from "$lib/chat/states";
 import {
     applyConversationFilterArchive, applyConversationFilterSearch,
     conversations, fetchConversations,
@@ -33,9 +41,9 @@ async function startListenerSelectedConversation() {
             return;
         }
         else{
+            messagePage.set(1);
             noChat.set(false);
             chatOpen.set(true)
-
             await fetchCurrentMessages();
             let res = await openConversation(selectedConversation.conversationObj._id);
             if(res == false || res.status != 200) {

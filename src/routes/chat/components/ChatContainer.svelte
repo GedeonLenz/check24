@@ -28,9 +28,9 @@ import {fetchCurrentMessages} from "$lib/chat/messages";
     <style>
         @media screen and (max-width: 720px) {
             .chat-container {
-                display: block;
-                width: 100%;
-                left:0;
+                display: block !important;
+                width: 100% !important;
+                left:0 !important;
             }
         }
     </style>

@@ -115,7 +115,7 @@
     }
 </style>
 <div class="chat-editor">
-    <div id="sendprogress" class="sendprogress" style="width: {sendProgress}%"></div>
+    <div id="sendprogress" class="sendprogress" style="width: {$sendProgress}%"></div>
     {#if
         $currentUser !== undefined &&
         $currentUser.type === UserRole.ServiceProvider &&
