@@ -127,7 +127,7 @@
 </style>
 <div class="chat-editor">
     <div id="sendprogress" class="sendprogress" style="width: {$sendProgress}%"></div>
-    {#if isDisabled === true}
+    {#if isDisabled === true }
         <div class="icon-wrapper" style="filter: brightness(80%)">
             <i class="fa-regular fa-file"></i>
             <input disabled bind:files={$fileValue} on:change={() => {sendFileMessageRequest()}} class="input-file" id="fileInput" type="file">
