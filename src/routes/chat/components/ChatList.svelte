@@ -5,7 +5,6 @@
     import LoadingScreen from "./LoadingScreen.svelte";
     import ChatSearch from "./ChatList/ChatSearch.svelte";
     import {chatOpen, loadingChatList} from "$lib/chat/states";
-    import {fetchConversations} from "$lib/chat/conversations";
 </script>
 <style>
     .chat-list {

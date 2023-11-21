@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {MessageType, type User} from "$lib/types.js";
+    import {MessageType} from "$lib/types.js";
     import MessageAccept from "../ChatContainer/ChatHistory/Messages/MessageAccept.svelte";
     import MessageStandard from "../ChatContainer/ChatHistory/Messages/MessageStandard.svelte";
     import MessageFile from "../ChatContainer/ChatHistory/Messages/MessageFile.svelte";

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {Message_Offer, User, ConversationEntry} from "$lib/types";
+    import type {Message_Offer} from "$lib/types";
     import {ConversationState} from "$lib/types";
     import ReviewPanel from "./MessageQuote/ReviewPanel.svelte";
     import ConsentPanel from "./MessageQuote/ConsentPanel.svelte";

@@ -5,7 +5,6 @@ import LoadingScreen from "./LoadingScreen.svelte";
 import ChatHistory from "./ChatContainer/ChatHistory.svelte";
 import NoChat from "./ChatContainer/NoChat.svelte";
 import {chatOpen, loadingChatPanel} from "$lib/chat/states";
-import {fetchCurrentMessages} from "$lib/chat/messages";
 </script>
 <style>
     .chat-container {

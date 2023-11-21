@@ -10,7 +10,7 @@ import {
     reviewConversation
 } from "$lib/tools/clientTools";
 import {error, success} from "$lib/chat/notifications";
-import {fetchCurrentMessages, messages} from "$lib/chat/messages";
+import {fetchCurrentMessages} from "$lib/chat/messages";
 import {currentUser} from "$lib/chat/user";
 import {
     archiveMode,
@@ -40,7 +40,7 @@ export async function fetchConversations(invisible:boolean = false) {
 }
 
 export async function initSelectedConversation() {
-    let initVal:ConversationEntry | undefined = undefined;
+    let initVal:ConversationEntry | undefined;
     let isContained:boolean = get(viewConversations).filter((entry) => {
         return entry.conversationObj._id === (get(lastOpenedConversation) as ConversationEntry).conversationObj._id;
     }).length >= 1;

@@ -39,10 +39,9 @@ export async function fetchMessages(conversation:ConversationEntry | undefined,i
         let lastPresentMessageID = get(messages).length >= 1 ? get(messages)[get(messages).length-1]._id : undefined;
         let matchingIndex = undefined;
         if(addPage) {
-            let prepend:Message[] = newMessages;
             if(get(messages).length === 0 || (newMessages.length >= 1 && newMessages[0]._id !== get(messages)[0]._id)) {
                 messagePage.set(get(messagePage)+1);
-                messages.set(prepend.concat(get(messages)));
+                messages.set(newMessages.concat(get(messages)));
             }
         }
         else{
@@ -169,41 +168,6 @@ export function resetProgressBar() {
         setTimeout(() => {
             (progbar as HTMLElement).style.display = 'block';
         }, 300);
-    }
-}
-
-
-
-
-
-//deprecated todo
-function insertUnreadBanner() {
-    const container = document.getElementById('chat-history-content');
-    if(container == null) return;
-    const prevBanner = container.querySelector('.unread-banner');
-    if(prevBanner){
-
-        if(prevBanner.classList.contains('first-message')) {
-            const tempContainer = document.createElement('div');
-            tempContainer.innerHTML = '<div id="top-placeholder"></div>'
-            container.insertBefore(tempContainer.firstChild as ChildNode, prevBanner);
-        }
-        prevBanner.remove();
-    }
-    const firstUnreadElement = container.querySelector('.message-unread');
-    if (firstUnreadElement) {
-        const groupElements = document.querySelectorAll('.chat-message');
-        const isFirstMessage = Array.from(groupElements).indexOf(firstUnreadElement as Element) === 0;
-
-        const tempContainer = document.createElement('div');
-        tempContainer.innerHTML = '<div class="chat-message unread-banner" id="unread-banner"><span>Unread messages</span></div>'
-        if(isFirstMessage) tempContainer.innerHTML = '<div class="chat-message unread-banner first-message"><span>Unread messages</span></div>'
-        container.insertBefore(tempContainer.firstChild as ChildNode, firstUnreadElement);
-
-        if (isFirstMessage) {
-            let placeholder = document.getElementById('top-placeholder')
-            if(placeholder) placeholder.remove();
-        }
     }
 }
 

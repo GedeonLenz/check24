@@ -2,7 +2,6 @@ import {error, resetError, resetSuccess, success} from "$lib/chat/notifications"
 import {
     archiveMode,
     chatOpen,
-    loadingChatPanel,
     messagePage,
     noChat,
     noSelectTrigger,
@@ -10,16 +9,14 @@ import {
 } from "$lib/chat/states";
 import {
     applyConversationFilterArchive, applyConversationFilterSearch,
-    conversations, fetchConversations,
+    conversations,
     selectedConversation,
     viewConversations,
     visibleConversations
 } from "$lib/chat/conversations";
-import {getOtherUsername, openConversation} from "$lib/tools/clientTools";
-import {currentUser} from "$lib/chat/user";
+import {openConversation} from "$lib/tools/clientTools";
 import {get} from "svelte/store";
-import {UserRole} from "$lib/types";
-import {fetchCurrentMessages, fetchMessages} from "$lib/chat/messages";
+import {fetchCurrentMessages} from "$lib/chat/messages";
 
 export async function startAllListeners() {
     await startNotificationListener();
@@ -69,19 +66,19 @@ async function startNotificationListener() {
 }
 
 async function startListenerSearchQuery() {
-    searchQuery.subscribe(async (query) => {
+    searchQuery.subscribe(async () => {
         visibleConversations.set(await applyConversationFilterSearch(get(viewConversations)));
     });
 }
 
 async function startListenerArchiveMode() {
-    archiveMode.subscribe(async (query) => {
+    archiveMode.subscribe(async () => {
         viewConversations.set(await applyConversationFilterArchive(get(conversations)));
     });
 }
 
 async function startListenerViewConversations() {
-    viewConversations.subscribe(async (query) => {
+    viewConversations.subscribe(async () => {
         visibleConversations.set(await applyConversationFilterSearch(get(viewConversations)));
     });
 }

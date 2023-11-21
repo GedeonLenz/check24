@@ -5,7 +5,7 @@
         dateStringToDate,
         getCurrentDateTime,
         getOtherUsername, getReview,
-        getReviewRequested, requestConversationReview, reviewConversation
+        getReviewRequested,
     } from "$lib/tools/clientTools";
     import {requestReview, selectedConversation, sendReview} from "$lib/chat/conversations";
     import {currentUser} from "$lib/chat/user";

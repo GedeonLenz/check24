@@ -1,6 +1,6 @@
 <script lang="ts">
 import {getOtherUsername} from "$lib/tools/clientTools.js";
-import type {User, ConversationEntry} from "$lib/types";
+import type {ConversationEntry} from "$lib/types";
 import type {Message, Message_Offer, Message_Standard} from "$lib/types";
 import {selectedConversation} from "$lib/chat/conversations";
 import {MessageType} from "$lib/types";
