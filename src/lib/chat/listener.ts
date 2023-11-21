@@ -9,7 +9,7 @@ import {
 } from "$lib/chat/states";
 import {
     applyConversationFilterArchive, applyConversationFilterSearch,
-    conversations,
+    conversations, fetchConversations,
     selectedConversation,
     viewConversations,
     visibleConversations
@@ -22,31 +22,8 @@ export async function startAllListeners() {
     await startNotificationListener();
     await startListenerArchiveMode();
     await startListenerSearchQuery();
-    await startListenerSelectedConversation();
     await startListenerConversations();
     await startListenerViewConversations();
-}
-async function startListenerSelectedConversation() {
-    selectedConversation.subscribe(async (selectedConversation) => {
-        if(get(noSelectTrigger)) {
-            noSelectTrigger.set(false);
-            return;
-        }
-        if(selectedConversation === undefined) {
-            noChat.set(true);
-            chatOpen.set(false)
-            return;
-        }
-        else{
-            messagePage.set(1);
-            noChat.set(false);
-            chatOpen.set(true)
-            await fetchCurrentMessages();
-            markAsRead();
-            insertUnreadBanner();
-            sendRead();
-        }
-    });
 }
 
 async function startListenerConversations() {

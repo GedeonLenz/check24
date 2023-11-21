@@ -13,7 +13,7 @@ export async function startAllSchedulers() {
 const delay = 5*1000;
 export async function startChatListUpdater() {
     let scheduler = setInterval(async () => {
-        await fetchConversations(true);
+        await updateSelectedConversation();
     }, delay);
     schedulaerChatList.set(scheduler);
 }

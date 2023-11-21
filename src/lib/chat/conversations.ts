@@ -10,11 +10,11 @@ import {
     reviewConversation
 } from "$lib/tools/clientTools";
 import {error, success} from "$lib/chat/notifications";
-import {fetchCurrentMessages} from "$lib/chat/messages";
+import {fetchCurrentMessages, insertUnreadBanner, markAsRead, sendRead} from "$lib/chat/messages";
 import {currentUser} from "$lib/chat/user";
 import {
-    archiveMode,
-    loadingChatList,
+    archiveMode, chatOpen,
+    loadingChatList, messagePage,
     newChatVisible,
     noChat, noSelectTrigger,
     quote_price,
@@ -55,9 +55,30 @@ export async function initSelectedConversation() {
         initVal = get(viewConversations).length >= 1 ? get(viewConversations)[0] : undefined;
     }
     if(initVal == undefined) noChat.set(true);
-    selectedConversation.set(initVal);
+   await openConversation(initVal);
 }
 
+export async function openConversation(newConversation:ConversationEntry | undefined) {
+    selectedConversation.set(newConversation);
+    if(get(selectedConversation) === undefined) {
+        noChat.set(true);
+        chatOpen.set(false)
+        return;
+    }
+    else{
+        messagePage.set(1);
+        noChat.set(false);
+        chatOpen.set(true)
+        await fetchCurrentMessages();
+        let sc = get(selectedConversation);
+        if(sc !== undefined && sc.unreadCount <= 0) {
+            markAsRead()
+        }
+        insertUnreadBanner();
+
+        sendRead();
+    }
+}
 export async function updateSelectedConversation() {
     await fetchConversations(true);
     let updateVal:ConversationEntry | undefined = undefined;
@@ -72,9 +93,9 @@ export async function updateSelectedConversation() {
     if(newElements.length >= 1) {
         updateVal = newElements[0];
     }
-    if(updateVal == undefined) noChat.set(true);
-    noSelectTrigger.set(true);
-    selectedConversation.set(updateVal);
+    if(updateVal !== undefined) {
+        selectedConversation.set(updateVal);
+    }
 }
 
 export async function sendQuote() {
@@ -87,7 +108,7 @@ export async function sendQuote() {
         success.set("Your quote has been sent.");
         let newEntry = await res.json();
         await fetchConversations();
-        selectedConversation.set(newEntry.data.conversation);
+        await openConversation(newEntry.data.conversation);
     }
     quote_username.set('');
     quote_price.set(0);
@@ -103,7 +124,7 @@ export async function archiveChat() {
         }
         else{
             success.set('Chat archived');
-            selectedConversation.set(undefined);
+            await openConversation(undefined);
             await fetchConversations(true);
         }
     }

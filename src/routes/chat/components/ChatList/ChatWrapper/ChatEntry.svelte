@@ -2,7 +2,7 @@
 import {getOtherUsername} from "$lib/tools/clientTools.js";
 import type {ConversationEntry} from "$lib/types";
 import type {Message, Message_Offer, Message_Standard} from "$lib/types";
-import {selectedConversation} from "$lib/chat/conversations";
+import {openConversation, selectedConversation} from "$lib/chat/conversations";
 import {MessageType} from "$lib/types";
 import {currentUser} from "$lib/chat/user";
 export let conversation:ConversationEntry;
@@ -141,7 +141,7 @@ function displayLastMessage(lastMessage:Message) {
         }
     }
 </style>
-<div on:click={() => {selectedConversation.set(conversation)}} on:keydown={() => {selectedConversation.set(conversation)}} role="button" tabindex="0" class="chat-item {isActive ? 'chat-item-active' : ''}">
+<div on:click={() => {openConversation(conversation)}} on:keydown={() => {openConversation(conversation)}} role="button" tabindex="0" class="chat-item {isActive ? 'chat-item-active' : ''}">
     <span class="chat-picture">
         {#if conversation.pictureURL !== ""}
             <img src="{conversation.pictureURL}" alt="profile-icon">
