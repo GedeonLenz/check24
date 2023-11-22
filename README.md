@@ -115,6 +115,7 @@ Clone the repository:
 
 ```javascript
 https://github.com/GedeonLenz/check24.git
+```
 
 Add a .env file to the projects root directory and fill in the required values
 
