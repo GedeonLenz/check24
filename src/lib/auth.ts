@@ -9,7 +9,7 @@ export async function generateJWT(username:string,type:UserRole,pictureURL:strin
     const payload = {
         username: username,
         type: type,
-        picturePath: pictureURL
+        pictureURL: pictureURL
     };
     return jwt.sign(payload, SECRET_JWT_KEY, {});
 }
