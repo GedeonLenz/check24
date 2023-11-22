@@ -111,6 +111,8 @@ Password: CheckedIn24 (Both users)
 
 **NOTICE: The recommended way to view the project is through the live demo.** 
 
+### Steps
+
 Clone the repository:
 
 ```javascript
