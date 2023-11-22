@@ -15,6 +15,9 @@ const delay = 5*1000;
 export async function startChatListUpdater() {
     let scheduler = setInterval(async () => {
         console.log(get(currentUser));
+        if(get(currentUser) === undefined) {
+            return;
+        }
         await updateSelectedConversation();
     }, delay);
     schedulaerChatList.set(scheduler);
@@ -23,6 +26,9 @@ export async function startChatListUpdater() {
 export async function startChatMessageUpdater() {
     let scheduler = setInterval(async () => {
         console.log(get(currentUser));
+        if(get(currentUser) === undefined) {
+            return;
+        }
         await fetchCurrentMessages(true);
     }, delay);
     schedulaerChatMessages.set(scheduler);
