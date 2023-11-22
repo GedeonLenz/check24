@@ -107,6 +107,40 @@ Usernames: Hanna Müller (Customer), Tom Winter (Service Provider)
 
 Password: CheckedIn24 (Both users)
 
+## Run using Docker
+
+**NOTICE: The recommended way to view the project is through the live demo.** 
+
+Clone the repository:
+
+```javascript
+https://github.com/GedeonLenz/check24.git
+
+Add a .env file to the projects root directory and fill in the required values
+
+```javascript
+SECRET_DB_URI=MONGODB_CONNECTION_STRING_HERE
+SECRET_JWT_KEY=RANDOM_LONG_STRING
+SECRET_STORAGE_S3_ENDPOINT=YOUR_S3_ENDPOINT
+SECRET_STORAGE_S3_ACCESSKEY=YOUR_S3_ACCESS_KEY
+SECRET_STORAGE_S3_SECRETKEY=YOUR_S3_SECRET_KEY
+SECRET_STORAGE_S3_REGION=YOUR_S3_REGION
+SECRET_STORAGE_S3_BUCKET_NAME=YOUR_S3_BUCKET_NAME
+SECRET_STORAGE_S3_DIRECTORY=YOUR_DIRECTORY_PATH_ENDING_WITH_/
+SECRET_STORAGE_S3_PUBLIC_URL=YOUR_PUBLIC_BUCKET_URL_ENDING_WITH_/
+```
+
+Run in project root:
+
+```javascript
+docker-compose build 
+```
+
+Run in project root:
+
+```javascript
+docker-compose up -d
+```
 
 ## Run locally
 
@@ -155,7 +189,7 @@ Run in project root:
 ```javascript
  npm run preview
 ```
-(Adapter settings might need to be adjusted before.)
+(Additional adapters might need to be installed and configured for this to work.)
 
 Alternatively:
 Run in project root:
