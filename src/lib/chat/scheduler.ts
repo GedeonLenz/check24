@@ -14,7 +14,6 @@ export async function startAllSchedulers() {
 const delay = 5*1000;
 export async function startChatListUpdater() {
     let scheduler = setInterval(async () => {
-        console.log(get(currentUser));
         if(get(currentUser) === undefined) {
             return;
         }
@@ -25,7 +24,6 @@ export async function startChatListUpdater() {
 
 export async function startChatMessageUpdater() {
     let scheduler = setInterval(async () => {
-        console.log(get(currentUser));
         if(get(currentUser) === undefined) {
             return;
         }
