@@ -1,0 +1,18 @@
+version: "3"
+services:
+  external:
+    container_name: Check24Messenger
+    image: check24messenger
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: "node"
+    environment:
+      - ORIGIN=http://localhost:3000
+      - NODE_ENV=production
+      - TZ=Europe/Berlin
+    env_file:
+      - .env
+    restart: unless-stopped
+    ports:
+      - 3000:3000
