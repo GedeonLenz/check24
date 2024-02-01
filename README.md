@@ -101,13 +101,6 @@ Similar to Amazon S3, Cloudflare R2 allows developers to store and retrieve larg
 
 ImageKit is the service I use for compressing and serving images / files uploaded by the user to the the Cloudflare R2 storage. This results in faster load times of the chat application.
 
-## Demo
-
-A live demo is available here: <https://check24.gedeonlenz.com>
-
-Usernames: Hanna Müller (Customer), Tom Winter (Service Provider)
-
-Password: CheckedIn24 (Both users)
 
 ## Run using Docker
 
