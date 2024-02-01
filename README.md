@@ -1,4 +1,6 @@
 # Check24 Messenger Implementation
+My solution for the Gen Dev Messenger Challenge
+https://github.com/check24-scholarships/check24-messenger-challenge
 
 ## Approach
 
